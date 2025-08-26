@@ -46,6 +46,8 @@ export class NumberLine extends HTMLElement {
                 :host {
                     display: block;
                     margin-top: 20px;
+                    position: relative;
+                    z-index: 10;
                 }
                 
                 canvas {
@@ -57,6 +59,7 @@ export class NumberLine extends HTMLElement {
                     height: auto;
                     display: block;
                     margin: 0 auto;
+                    position: relative;
                 }
             </style>
             <canvas width="800" height="120"></canvas>

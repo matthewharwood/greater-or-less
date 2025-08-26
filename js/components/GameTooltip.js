@@ -3,7 +3,7 @@ export class GameTooltip extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this._message = '';
-        this._duration = 3000;
+        this._duration = 3750;
         this._timeoutId = null;
     }
 
@@ -28,7 +28,7 @@ export class GameTooltip extends HTMLElement {
                 this._message = newValue || '';
                 break;
             case 'duration':
-                this._duration = parseInt(newValue) || 3000;
+                this._duration = parseInt(newValue) || 3750;
                 break;
         }
         if (this.shadowRoot) {
@@ -48,7 +48,7 @@ export class GameTooltip extends HTMLElement {
         this.setAttribute('duration', val.toString());
     }
 
-    show(message, duration = 3000) {
+    show(message, duration = 3750) {
         this._message = message;
         this._duration = duration;
         this.render();
@@ -79,7 +79,6 @@ export class GameTooltip extends HTMLElement {
                     left: 50%;
                     transform: translate(-50%, -50%);
                     z-index: 200;
-                    animation: tooltip-bounce 0.5s ease-out;
                 }
                 
                 .tooltip {
@@ -93,6 +92,7 @@ export class GameTooltip extends HTMLElement {
                     border: 3px solid #ffffff;
                     text-align: center;
                     max-width: 300px;
+                    animation: tooltip-bounce 0.5s ease-out;
                 }
                 
                 @keyframes tooltip-bounce {

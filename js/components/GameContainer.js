@@ -48,11 +48,13 @@ export class GameContainer extends HTMLElement {
 
     updateNumberLine() {
         // Update the external number line component
-        const numberLine = document.querySelector('#main-number-line');
-        if (numberLine) {
-            numberLine.leftNumber = this._leftNumber;
-            numberLine.rightNumber = this._rightNumber;
-        }
+        setTimeout(() => {
+            const numberLine = document.querySelector('#main-number-line');
+            if (numberLine) {
+                numberLine.leftNumber = this._leftNumber;
+                numberLine.rightNumber = this._rightNumber;
+            }
+        }, 0);
     }
 
     render() {
@@ -147,7 +149,7 @@ export class GameContainer extends HTMLElement {
         
         // Show tooltip on first incorrect click
         if (this._firstClick && !isCorrect) {
-            this.showTooltip("Can you read it out loud before guessing?");
+            this.showTooltip("Look at the dots! Is 🔴 RED bigger than 🟢 GREEN? Right side = bigger!");
             this._firstClick = false;
             return;
         }
@@ -165,11 +167,20 @@ export class GameContainer extends HTMLElement {
     showResult(won) {
         this._showingResult = true;
         
+        // Update progress bar
+        const progressBar = document.querySelector('#progress-bar');
+        if (progressBar) {
+            if (won) {
+                progressBar.incrementStreak();
+            } else {
+                progressBar.resetStreak();
+            }
+        }
+        
         // Play sound and create visual effects
         if (won) {
             AudioService.playWinSound();
             this.createPulse('green');
-            this.createConfetti();
         } else {
             AudioService.playFailSound();
             this.createPulse('red');
@@ -180,6 +191,20 @@ export class GameContainer extends HTMLElement {
             }, 1000);
         }
         
+        // Clear and setup result container with proper positioning
+        this.shadowRoot.innerHTML = `
+            <style>
+                :host {
+                    display: block;
+                    position: relative;
+                }
+            </style>
+            <div style="position: relative;">
+            </div>
+        `;
+        
+        const container = this.shadowRoot.querySelector('div');
+        
         // Show result screen
         const resultScreen = document.createElement('result-screen');
         resultScreen.setAttribute('won', won.toString());
@@ -187,16 +212,15 @@ export class GameContainer extends HTMLElement {
         resultScreen.setAttribute('right-number', this._rightNumber.toString());
         
         resultScreen.onCountdownComplete = () => {
-            this.startNewGame();
+            location.reload();
         };
         
-        this.shadowRoot.innerHTML = '';
-        this.shadowRoot.appendChild(resultScreen);
+        container.appendChild(resultScreen);
         
         if (won) {
-            // Add confetti to result screen
+            // Add confetti to result screen container
             const confetti = document.createElement('confetti-canvas');
-            this.shadowRoot.appendChild(confetti);
+            container.appendChild(confetti);
         }
     }
 

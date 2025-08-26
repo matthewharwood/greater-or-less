@@ -3,7 +3,11 @@
     "allow": [
       "WebFetch(domain:www.agnosticui.com)",
       "WebFetch(domain:vanjs.org)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(move index.html index-original.html)",
+      "Bash(rename:*)",
+      "Bash(start test-versions.html)",
+      "Bash(start index.html)"
     ],
     "deny": [],
     "ask": []
