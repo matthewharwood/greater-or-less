@@ -1,0 +1,258 @@
+/**
+ * CSS Custom Properties (Variables) Theme System
+ * Using thoughtful color theory and modular scale
+ */
+
+:root {
+  /* ============================================
+     COLOR SYSTEM - Using HSL for easy manipulation
+     ============================================ */
+  
+  /* Primary Colors - Blue family for trust and learning */
+  --color-primary-h: 211;
+  --color-primary-s: 100%;
+  --color-primary-l: 50%;
+  --color-primary: hsl(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l));
+  --color-primary-light: hsl(var(--color-primary-h), var(--color-primary-s), 65%);
+  --color-primary-lighter: hsl(var(--color-primary-h), var(--color-primary-s), 85%);
+  --color-primary-lightest: hsl(var(--color-primary-h), var(--color-primary-s), 95%);
+  --color-primary-dark: hsl(var(--color-primary-h), var(--color-primary-s), 35%);
+  --color-primary-darker: hsl(var(--color-primary-h), var(--color-primary-s), 20%);
+  
+  /* Success Colors - Green for correct answers */
+  --color-success-h: 142;
+  --color-success-s: 71%;
+  --color-success-l: 45%;
+  --color-success: hsl(var(--color-success-h), var(--color-success-s), var(--color-success-l));
+  --color-success-light: hsl(var(--color-success-h), var(--color-success-s), 60%);
+  --color-success-lighter: hsl(var(--color-success-h), var(--color-success-s), 85%);
+  --color-success-lightest: hsl(var(--color-success-h), var(--color-success-s), 95%);
+  --color-success-dark: hsl(var(--color-success-h), var(--color-success-s), 30%);
+  
+  /* Error Colors - Red for incorrect answers */
+  --color-error-h: 354;
+  --color-error-s: 70%;
+  --color-error-l: 54%;
+  --color-error: hsl(var(--color-error-h), var(--color-error-s), var(--color-error-l));
+  --color-error-light: hsl(var(--color-error-h), var(--color-error-s), 65%);
+  --color-error-lighter: hsl(var(--color-error-h), var(--color-error-s), 90%);
+  --color-error-lightest: hsl(var(--color-error-h), var(--color-error-s), 97%);
+  --color-error-dark: hsl(var(--color-error-h), var(--color-error-s), 40%);
+  
+  /* Warning/Equal Colors - Yellow/Gold */
+  --color-warning-h: 45;
+  --color-warning-s: 93%;
+  --color-warning-l: 47%;
+  --color-warning: hsl(var(--color-warning-h), var(--color-warning-s), var(--color-warning-l));
+  --color-warning-light: hsl(var(--color-warning-h), var(--color-warning-s), 60%);
+  --color-warning-lighter: hsl(var(--color-warning-h), var(--color-warning-s), 85%);
+  --color-warning-dark: hsl(var(--color-warning-h), var(--color-warning-s), 35%);
+  
+  /* Neutral Colors - Grays */
+  --color-neutral-0: hsl(0, 0%, 100%);     /* White */
+  --color-neutral-50: hsl(0, 0%, 98%);
+  --color-neutral-100: hsl(0, 0%, 96%);
+  --color-neutral-200: hsl(0, 0%, 93%);
+  --color-neutral-300: hsl(0, 0%, 88%);
+  --color-neutral-400: hsl(0, 0%, 74%);
+  --color-neutral-500: hsl(0, 0%, 62%);
+  --color-neutral-600: hsl(0, 0%, 46%);
+  --color-neutral-700: hsl(0, 0%, 38%);
+  --color-neutral-800: hsl(0, 0%, 23%);
+  --color-neutral-900: hsl(0, 0%, 13%);
+  --color-neutral-1000: hsl(0, 0%, 0%);   /* Black */
+  
+  /* Background Colors */
+  --color-bg-primary: var(--color-neutral-100);
+  --color-bg-secondary: var(--color-neutral-0);
+  --color-bg-overlay: hsla(0, 0%, 0%, 0.5);
+  --color-bg-glass: hsla(0, 0%, 100%, 0.95);
+  
+  /* Text Colors */
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-700);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-inverse: var(--color-neutral-0);
+  
+  /* Game-specific Colors */
+  --color-player-red: hsl(4, 71%, 53%);
+  --color-player-green: hsl(145, 63%, 42%);
+  --color-progress-gradient-start: hsla(145, 63%, 57%, 0.3);
+  --color-progress-gradient-mid: hsla(168, 76%, 42%, 0.45);
+  --color-progress-gradient-end: hsla(187, 71%, 48%, 0.5);
+  
+  /* ============================================
+     TYPOGRAPHY - Modular Scale (1.25 ratio)
+     ============================================ */
+  
+  /* Font Families */
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Roboto Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  /* Legacy support */
+  --font-system: var(--font-body);
+  
+  /* Font Sizes - Using rem for accessibility */
+  --font-size-xs: 0.64rem;     /* 10.24px */
+  --font-size-sm: 0.8rem;      /* 12.8px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-md: 1.25rem;     /* 20px */
+  --font-size-lg: 1.563rem;    /* 25px */
+  --font-size-xl: 1.953rem;    /* 31.25px */
+  --font-size-2xl: 2.441rem;   /* 39px */
+  --font-size-3xl: 3.052rem;   /* 48.8px */
+  --font-size-4xl: 3.815rem;   /* 61px */
+  --font-size-5xl: 4.768rem;   /* 76.3px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;      /* For Roboto Mono Light */
+  --font-weight-normal: 400;     /* For Source Sans Pro Regular */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;   /* For Source Sans Pro Semibold */
+  --font-weight-bold: 700;
+  --font-weight-black: 900;      /* For Roboto Black */
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+  
+  /* ============================================
+     SPACING - Using 8px grid system
+     ============================================ */
+  
+  --space-unit: 8px;
+  --space-xxs: calc(var(--space-unit) * 0.5);   /* 4px */
+  --space-xs: var(--space-unit);                 /* 8px */
+  --space-sm: calc(var(--space-unit) * 1.5);     /* 12px */
+  --space-md: calc(var(--space-unit) * 2);       /* 16px */
+  --space-lg: calc(var(--space-unit) * 3);       /* 24px */
+  --space-xl: calc(var(--space-unit) * 4);       /* 32px */
+  --space-2xl: calc(var(--space-unit) * 5);      /* 40px */
+  --space-3xl: calc(var(--space-unit) * 6);      /* 48px */
+  --space-4xl: calc(var(--space-unit) * 8);      /* 64px */
+  --space-5xl: calc(var(--space-unit) * 10);     /* 80px */
+  
+  /* ============================================
+     BORDERS
+     ============================================ */
+  
+  --border-width-thin: 1px;
+  --border-width-base: 2px;
+  --border-width-thick: 3px;
+  --border-width-heavy: 4px;
+  
+  --border-radius-sm: 4px;
+  --border-radius-base: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
+  --border-radius-2xl: 25px;
+  --border-radius-round: 50%;
+  --border-radius-pill: 9999px;
+  
+  /* ============================================
+     SHADOWS - Consistent elevation system
+     ============================================ */
+  
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.18);
+  --shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.2);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* Colored shadows */
+  --shadow-primary: 0 4px 12px rgba(0, 123, 255, 0.3);
+  --shadow-success: 0 4px 12px rgba(52, 199, 89, 0.3);
+  --shadow-error: 0 4px 12px rgba(255, 59, 48, 0.3);
+  
+  /* ============================================
+     TRANSITIONS & ANIMATIONS
+     ============================================ */
+  
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+  --transition-slower: 800ms ease;
+  
+  --animation-duration-fast: 200ms;
+  --animation-duration-base: 500ms;
+  --animation-duration-slow: 1000ms;
+  --animation-duration-slower: 2000ms;
+  
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  
+  --z-index-negative: -1;
+  --z-index-base: 0;
+  --z-index-dropdown: 10;
+  --z-index-sticky: 20;
+  --z-index-overlay: 30;
+  --z-index-modal: 40;
+  --z-index-popover: 50;
+  --z-index-tooltip: 60;
+  --z-index-notification: 70;
+  --z-index-max: 9999;
+  
+  /* ============================================
+     BREAKPOINTS
+     ============================================ */
+  
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* ============================================
+     GAME-SPECIFIC VARIABLES
+     ============================================ */
+  
+  --game-card-width: 500px;
+  --game-card-padding: var(--space-2xl);
+  --game-button-height: 60px;
+  --game-button-min-width: 100px;
+  --game-countdown-size: 80px;
+  --game-number-line-height: 120px;
+  --game-progress-counter-height: 44px;
+  
+  /* Animation durations for game */
+  --game-button-delay: 2000ms;
+  --game-tooltip-duration: 3750ms;
+  --game-celebration-duration: 12000ms;
+  --game-countdown-win: 3000ms;
+  --game-countdown-lose: 15000ms;
+}
+
+/* Dark theme support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme overrides would go here */
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+    --transition-slower: 0ms;
+    --animation-duration-fast: 0ms;
+    --animation-duration-base: 0ms;
+    --animation-duration-slow: 0ms;
+    --animation-duration-slower: 0ms;
+  }
+}

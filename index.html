@@ -3,8 +3,15 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <title>Higher Or Lower - Number Guessing Game</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&family=Roboto:wght@900&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="Educational number comparison game for kids">
 
@@ -22,61 +29,57 @@
   <meta name="theme-color" content="#fafafa">
   
   <style>
-    /* Component-specific overrides */
+    /* Prevent zoom on iOS */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    input, textarea, button, select, a {
+      -webkit-touch-callout: none;
+    }
+    
+    /* Component-specific overrides using CSS variables */
     body {
-      background-color: #f0f2f5;
+      background-color: var(--color-bg-primary);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      padding: 20px;
+      font-family: var(--font-body);
+      font-weight: var(--font-weight-normal);
+      padding: var(--space-lg);
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
-    }
-    
-    #game-title {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      margin: 0;
-      color: #1a1a1a;
-      font-size: 2rem;
-      z-index: 15;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
+      /* Prevent pinch zoom and double-tap zoom */
+      touch-action: manipulation;
     }
     
     .game-card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-      padding: 40px;
+      background: var(--color-bg-secondary);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-xl);
+      padding: var(--game-card-padding);
       text-align: center;
-      max-width: 500px;
+      max-width: var(--game-card-width);
       width: 100%;
       position: relative;
-      z-index: 10;
+      z-index: var(--z-index-dropdown);
     }
     
     .game-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: var(--space-lg);
       width: 100%;
       max-width: 800px;
       position: relative;
-      z-index: 10;
+      z-index: var(--z-index-dropdown);
     }
   </style>
 </head>
