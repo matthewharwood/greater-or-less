@@ -47,12 +47,25 @@ export class GameContainer extends HTMLElement {
     }
 
     updateNumberLine() {
+        // Get current streak to determine if we should show the number line
+        const currentStreak = parseInt(localStorage.getItem('gameStreak') || '0');
+        const shouldHide = [1, 3, 5, 7].includes(currentStreak);
+        
         // Update the external number line component
         setTimeout(() => {
             const numberLine = document.querySelector('#main-number-line');
             if (numberLine) {
-                numberLine.leftNumber = this._leftNumber;
-                numberLine.rightNumber = this._rightNumber;
+                if (shouldHide) {
+                    numberLine.style.visibility = 'hidden';
+                    numberLine.style.opacity = '0';
+                    numberLine.style.transition = 'opacity 0.3s ease';
+                } else {
+                    numberLine.style.visibility = 'visible';
+                    numberLine.style.opacity = '1';
+                    numberLine.style.transition = 'opacity 0.3s ease';
+                    numberLine.leftNumber = this._leftNumber;
+                    numberLine.rightNumber = this._rightNumber;
+                }
             }
         }, 0);
     }
@@ -151,6 +164,20 @@ export class GameContainer extends HTMLElement {
         if (this._firstClick && !isCorrect) {
             this.showTooltip("Look at the dots! Is 🔴 RED bigger than 🟢 GREEN? Right side = bigger!");
             this._firstClick = false;
+            
+            // If number line was hidden, show it now to help
+            const currentStreak = parseInt(localStorage.getItem('gameStreak') || '0');
+            const wasHidden = [1, 3, 5, 7].includes(currentStreak);
+            if (wasHidden) {
+                const numberLine = document.querySelector('#main-number-line');
+                if (numberLine) {
+                    numberLine.style.visibility = 'visible';
+                    numberLine.style.opacity = '1';
+                    numberLine.style.transition = 'opacity 0.3s ease';
+                    numberLine.leftNumber = this._leftNumber;
+                    numberLine.rightNumber = this._rightNumber;
+                }
+            }
             return;
         }
         
