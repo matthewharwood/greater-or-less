@@ -1,22 +1,22 @@
 function generateRandomNumbers() {
     // Get current round number from localStorage, default to 1
     let currentRound = parseInt(localStorage.getItem('gameRound') || '1');
-    
+
     // Every 5th round (5, 10, 15, 20, etc.), make numbers equal
     if (currentRound % 5 === 0) {
         const equalNumber = Math.floor(Math.random() * 1001);
         return [equalNumber, equalNumber];
     }
-    
+
     // For other rounds, generate different numbers
     let rng_range_1 = Math.floor(Math.random() * 1001);
     let rng_range_2 = Math.floor(Math.random() * 1001);
-    
+
     // Ensure they're not accidentally equal
     while (rng_range_1 === rng_range_2) {
         rng_range_2 = Math.floor(Math.random() * 1001);
     }
-    
+
     return [rng_range_1, rng_range_2];
 }
 
@@ -86,7 +86,7 @@ class RandomButton extends HTMLElement {
             </style>
             <button ${this.disabled ? 'disabled' : ''} ${this.textColor ? `style="color: ${this.textColor} !important;"` : ''}>${this.value}</button>
         `;
-        
+
         if (!this.disabled) {
             this.shadowRoot.querySelector('button').addEventListener('click', this.clickHandler);
         }
@@ -100,7 +100,7 @@ let firstClick = true;
 function evaluateGuess(guess) {
     const [num1, num2] = globalRandomNumbers;
     let isCorrect = false;
-    
+
     if (guess === 'higher' && num1 > num2) {
         isCorrect = true;
     } else if (guess === 'lower' && num1 < num2) {
@@ -108,14 +108,14 @@ function evaluateGuess(guess) {
     } else if (guess === 'equal' && num1 === num2) {
         isCorrect = true;
     }
-    
+
     if (firstClick && !isCorrect) {
         // Show tooltip and prevent evaluation only if wrong on first click
         showTooltip("Can you read it out loud before guessing?");
         firstClick = false;
         return;
     }
-    
+
     showResult(isCorrect);
     firstClick = false; // Reset for next round
 }
@@ -123,7 +123,7 @@ function evaluateGuess(guess) {
 function showResult(won) {
     const container = document.querySelector('#game-container');
     const [num1, num2] = globalRandomNumbers;
-    
+
     const encouragementMessages = [
         "🤔 Think more carefully next time!",
         "⏰ Take your time to compare the numbers!",
@@ -138,7 +138,7 @@ function showResult(won) {
         "😮‍💨 Take a deep breath and think carefully!",
         "⭐ You can do better - concentrate harder!"
     ];
-    
+
     const winningMessages = [
         "🎉 BINGO YOU WON! 🎉",
         "⭐ AMAZING! YOU'RE CORRECT! ⭐",
@@ -156,24 +156,24 @@ function showResult(won) {
 
     if (won) {
         const randomWinMessage = winningMessages[Math.floor(Math.random() * winningMessages.length)];
-        
+
         // Play win sound
         const winAudio = new Audio('img/win_horns.mp3');
         winAudio.volume = 0.75;
         winAudio.play().catch(e => console.log('Could not play win sound:', e));
-        
+
         container.innerHTML = `
             <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;"></canvas>
             <h2 style="color: green; position: relative; z-index: 20;">${randomWinMessage}</h2>
             <div id="countdown" style="position: relative; z-index: 20; font-size: 48px; font-weight: bold; color: #27ae60; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin: 20px 0; background: linear-gradient(135deg, #a8e6cf, #7fcdcd); border: 4px solid #27ae60; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 20px auto; box-shadow: 0 8px 16px rgba(39, 174, 96, 0.4), inset 0 4px 8px rgba(255,255,255,0.3); animation: countdown-bounce 1s infinite;">3</div>
         `;
-        
+
         createConfetti();
         createPulse('green');
-        
+
         let countdown = 3;
         const countdownElement = document.querySelector('#countdown');
-        
+
         const timer = setInterval(() => {
             countdown--;
             if (countdown > 0) {
@@ -228,16 +228,16 @@ function showResult(won) {
                 </div>
             `;
         }
-        
+
         const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
-        
+
         // Play fail sound
         const failAudio = new Audio('img/fail_horns.mp3');
         failAudio.volume = 0.75;
         failAudio.play().catch(e => console.log('Could not play fail sound:', e));
-        
+
         createPulse('red');
-        
+
         // Speak the explanation when they lose
         setTimeout(() => {
             let spokenExplanation = "";
@@ -250,7 +250,7 @@ function showResult(won) {
             }
             speakText(spokenExplanation);
         }, 1000);
-        
+
         container.innerHTML = `
             <h2 style="color: red;">❌ WRONG! ❌</h2>
             <div style="margin: 20px 0; line-height: 1.5;">
@@ -261,10 +261,10 @@ function showResult(won) {
             </p>
             <div id="countdown" style="font-size: 24px; color: #ff6b6b;">15</div>
         `;
-        
+
         let countdown = 15;
         const countdownElement = document.querySelector('#countdown');
-        
+
         const timer = setInterval(() => {
             countdown--;
             if (countdown > 0) {
@@ -289,62 +289,62 @@ function speakText(text) {
 
 function initGame() {
     const container = document.querySelector('#game-container');
-    
+
     const button1 = new RandomButton(globalRandomNumbers[0], null, true, '#e74c3c'); // Red for left
     const button2 = new RandomButton(globalRandomNumbers[1], null, true, '#27ae60'); // Green for right
-    
+
     const trueButton = new RandomButton("True", () => evaluateGuess('higher'), true);
     const falseButton = new RandomButton("False", () => evaluateGuess('lower'), true);
     const equalButton = new RandomButton("Equal", () => evaluateGuess('equal'), true);
-    
+
     const greaterThanSign = document.createElement('span');
     greaterThanSign.textContent = ' > ';
     greaterThanSign.style.fontSize = '32px';
     greaterThanSign.style.fontWeight = 'bold';
     greaterThanSign.style.color = '#007bff';
     greaterThanSign.style.margin = '0 15px';
-    
+
     const numberRow = document.createElement('div');
     numberRow.className = 'number-row';
     numberRow.appendChild(button1);
     numberRow.appendChild(greaterThanSign);
     numberRow.appendChild(button2);
-    
+
     const englishText = document.createElement('div');
     englishText.style.fontSize = '18px';
     englishText.style.color = '#007bff';
     englishText.style.margin = '15px 0';
     englishText.style.fontWeight = '500';
     englishText.textContent = `"${globalRandomNumbers[0]} is greater than ${globalRandomNumbers[1]}"`;
-    
+
     const actionButtons = document.createElement('div');
     actionButtons.className = 'action-buttons';
     actionButtons.appendChild(trueButton);
     actionButtons.appendChild(falseButton);
     actionButtons.appendChild(equalButton);
-    
+
     container.appendChild(numberRow);
     container.appendChild(englishText);
     container.appendChild(actionButtons);
-    
+
     // Draw the number line
     drawNumberLine(globalRandomNumbers[0], globalRandomNumbers[1]);
-    
+
     // Speak the problem at start
     setTimeout(() => {
         speakText(`${globalRandomNumbers[0]} is greater than ${globalRandomNumbers[1]}. True or false?`);
     }, 500);
-    
+
     // Enable buttons after 2 seconds
     setTimeout(() => {
         trueButton.disabled = false;
         trueButton.clickHandler = () => evaluateGuess('higher');
         trueButton.render();
-        
+
         falseButton.disabled = false;
         falseButton.clickHandler = () => evaluateGuess('lower');
         falseButton.render();
-        
+
         equalButton.disabled = false;
         equalButton.clickHandler = () => evaluateGuess('equal');
         equalButton.render();
@@ -355,13 +355,13 @@ function createConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
     const container = document.querySelector('.game-card');
-    
+
     canvas.width = container.offsetWidth;
     canvas.height = container.offsetHeight;
-    
+
     const confettiPieces = [];
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
-    
+
     // Create confetti pieces
     for (let i = 0; i < 100; i++) {
         confettiPieces.push({
@@ -375,33 +375,33 @@ function createConfetti() {
             rotationSpeed: Math.random() * 10 - 5
         });
     }
-    
+
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         confettiPieces.forEach((piece, index) => {
             piece.x += piece.vx;
             piece.y += piece.vy;
             piece.rotation += piece.rotationSpeed;
-            
+
             ctx.save();
             ctx.translate(piece.x, piece.y);
             ctx.rotate(piece.rotation * Math.PI / 180);
             ctx.fillStyle = piece.color;
             ctx.fillRect(-piece.size/2, -piece.size/2, piece.size, piece.size);
             ctx.restore();
-            
+
             // Remove pieces that have fallen off screen
             if (piece.y > canvas.height + 10) {
                 confettiPieces.splice(index, 1);
             }
         });
-        
+
         if (confettiPieces.length > 0) {
             requestAnimationFrame(animate);
         }
     }
-    
+
     animate();
 }
 
@@ -409,7 +409,7 @@ function createPulse(color) {
     const pulseOverlay = document.createElement('div');
     pulseOverlay.className = `pulse-overlay pulse-${color}`;
     document.body.appendChild(pulseOverlay);
-    
+
     // Remove the pulse overlay after animation completes
     setTimeout(() => {
         if (pulseOverlay.parentNode) {
@@ -423,33 +423,33 @@ function drawNumberLine(leftNum, rightNum) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
-    
+
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
-    
+
     // Draw main number line
     const lineY = height / 2;
     const padding = 40;
     const lineWidth = width - (padding * 2);
-    
+
     ctx.strokeStyle = '#007bff';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(padding, lineY);
     ctx.lineTo(width - padding, lineY);
     ctx.stroke();
-    
+
     // Draw tick marks (every 100 units for visual clarity)
     ctx.lineWidth = 1;
     for (let i = 0; i <= 10; i++) {
         const x = padding + (i * lineWidth / 10);
         const tickHeight = i % 5 === 0 ? 15 : 8; // Bigger ticks at 0, 500, 1000
-        
+
         ctx.beginPath();
         ctx.moveTo(x, lineY - tickHeight);
         ctx.lineTo(x, lineY + tickHeight);
         ctx.stroke();
-        
+
         // Label major ticks
         if (i % 5 === 0) {
             ctx.fillStyle = '#007bff';
@@ -458,15 +458,15 @@ function drawNumberLine(leftNum, rightNum) {
             ctx.fillText((i * 100).toString(), x, lineY + 30);
         }
     }
-    
+
     // Add "SMALLER" and "BIGGER" labels
     ctx.fillStyle = '#666666';
     ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
-    
+
     // SMALLER on left side
     ctx.fillText('SMALLER', padding + (lineWidth * 0.15), lineY + 50);
-    
+
     // Arrow pointing left
     ctx.strokeStyle = '#666666';
     ctx.lineWidth = 2;
@@ -481,10 +481,10 @@ function drawNumberLine(leftNum, rightNum) {
     ctx.lineTo(padding + 12, lineY + 60);
     ctx.closePath();
     ctx.fill();
-    
+
     // BIGGER on right side
     ctx.fillText('BIGGER', width - padding - (lineWidth * 0.15), lineY + 50);
-    
+
     // Arrow pointing right
     ctx.beginPath();
     ctx.moveTo(width - padding - 20, lineY + 55);
@@ -497,22 +497,22 @@ function drawNumberLine(leftNum, rightNum) {
     ctx.lineTo(width - padding - 12, lineY + 60);
     ctx.closePath();
     ctx.fill();
-    
+
     // Calculate positions for our numbers
     const leftPos = padding + (leftNum / 1000) * lineWidth;
     const rightPos = padding + (rightNum / 1000) * lineWidth;
-    
+
     // Draw dots for the numbers
     ctx.fillStyle = '#e74c3c'; // Red for left number
     ctx.beginPath();
     ctx.arc(leftPos, lineY, 8, 0, 2 * Math.PI);
     ctx.fill();
-    
+
     ctx.fillStyle = '#27ae60'; // Green for right number
     ctx.beginPath();
     ctx.arc(rightPos, lineY, 8, 0, 2 * Math.PI);
     ctx.fill();
-    
+
     // Draw connecting line between dots
     ctx.strokeStyle = leftNum > rightNum ? '#e74c3c' : '#27ae60';
     ctx.lineWidth = 3;
@@ -522,16 +522,16 @@ function drawNumberLine(leftNum, rightNum) {
     ctx.lineTo(rightPos, lineY);
     ctx.stroke();
     ctx.setLineDash([]); // Reset dash
-    
+
     // Label the numbers above their dots
     ctx.fillStyle = '#e74c3c';
     ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(leftNum.toString(), leftPos, lineY - 20);
-    
+
     ctx.fillStyle = '#27ae60';
     ctx.fillText(rightNum.toString(), rightPos, lineY - 20);
-    
+
     // Draw arrows pointing to dots from equation
     drawArrowFromCard(leftPos, rightPos, leftNum, rightNum);
 }
@@ -540,23 +540,23 @@ function drawArrowFromCard(leftPos, rightPos, leftNum, rightNum) {
     const canvas = document.getElementById('number-line');
     const ctx = canvas.getContext('2d');
     const lineY = canvas.height / 2;
-    
+
     // Draw curved arrows from card area to number line
     ctx.strokeStyle = '#007bff';
     ctx.lineWidth = 2;
-    
+
     // Left arrow (from left side of card to left dot)
     ctx.beginPath();
     ctx.moveTo(leftPos - 50, 10); // Start above canvas
     ctx.quadraticCurveTo(leftPos - 25, lineY - 40, leftPos, lineY - 15);
     ctx.stroke();
-    
-    // Right arrow (from right side of card to right dot)  
+
+    // Right arrow (from right side of card to right dot)
     ctx.beginPath();
     ctx.moveTo(rightPos + 50, 10); // Start above canvas
     ctx.quadraticCurveTo(rightPos + 25, lineY - 40, rightPos, lineY - 15);
     ctx.stroke();
-    
+
     // Arrow heads
     ctx.fillStyle = '#007bff';
     // Left arrow head
@@ -566,7 +566,7 @@ function drawArrowFromCard(leftPos, rightPos, leftNum, rightNum) {
     ctx.lineTo(leftPos + 5, lineY - 25);
     ctx.closePath();
     ctx.fill();
-    
+
     // Right arrow head
     ctx.beginPath();
     ctx.moveTo(rightPos, lineY - 15);
@@ -581,7 +581,7 @@ function showTooltip(message) {
     tooltip.className = 'tooltip';
     tooltip.textContent = message;
     document.body.appendChild(tooltip);
-    
+
     // Remove tooltip after 3 seconds
     setTimeout(() => {
         if (tooltip.parentNode) {
