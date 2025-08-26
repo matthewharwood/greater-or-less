@@ -23,18 +23,29 @@ export class AudioService {
         }
     }
 
-    static speakProblem(leftNumber, rightNumber) {
-        this.speak(`${leftNumber} is greater than ${rightNumber}. True or false?`);
+    static speakProblem(leftNumber, rightNumber, mode = 'greater') {
+        const operator = mode === 'greater' ? 'is greater than' : 'is less than';
+        this.speak(`${leftNumber} ${operator} ${rightNumber}. True or false?`);
     }
 
-    static speakExplanation(leftNumber, rightNumber) {
+    static speakExplanation(leftNumber, rightNumber, mode = 'greater') {
         let explanation = "";
-        if (leftNumber > rightNumber) {
-            explanation = `${leftNumber} is greater than ${rightNumber}, so the statement is true.`;
-        } else if (leftNumber < rightNumber) {
-            explanation = `${leftNumber} is less than ${rightNumber}, so the statement is false.`;
-        } else {
-            explanation = `${leftNumber} equals ${rightNumber}, so the statement is false.`;
+        if (mode === 'greater') {
+            if (leftNumber > rightNumber) {
+                explanation = `${leftNumber} is greater than ${rightNumber}, so the statement is true.`;
+            } else if (leftNumber < rightNumber) {
+                explanation = `${leftNumber} is less than ${rightNumber}, so the statement is false.`;
+            } else {
+                explanation = `${leftNumber} equals ${rightNumber}, so the statement is false.`;
+            }
+        } else { // less than mode
+            if (leftNumber < rightNumber) {
+                explanation = `${leftNumber} is less than ${rightNumber}, so the statement is true.`;
+            } else if (leftNumber > rightNumber) {
+                explanation = `${leftNumber} is greater than ${rightNumber}, so the statement is false.`;
+            } else {
+                explanation = `${leftNumber} equals ${rightNumber}, so the statement is false.`;
+            }
         }
         this.speak(explanation);
     }

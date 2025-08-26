@@ -20,15 +20,31 @@ export class GameLogic {
         return [rng_range_1, rng_range_2];
     }
 
-    static evaluateAnswer(leftNumber, rightNumber, answer) {
-        if (answer === 'higher' && leftNumber > rightNumber) {
-            return true;
-        } else if (answer === 'lower' && leftNumber < rightNumber) {
-            return true;
-        } else if (answer === 'equal' && leftNumber === rightNumber) {
-            return true;
+    static evaluateAnswer(leftNumber, rightNumber, answer, mode = 'greater') {
+        if (mode === 'greater') {
+            // Greater than mode: leftNumber > rightNumber
+            if (answer === 'higher' && leftNumber > rightNumber) {
+                return true;
+            } else if (answer === 'lower' && leftNumber < rightNumber) {
+                return true;
+            } else if (answer === 'equal' && leftNumber === rightNumber) {
+                return true;
+            }
+        } else if (mode === 'less') {
+            // Less than mode: leftNumber < rightNumber
+            if (answer === 'higher' && leftNumber < rightNumber) {
+                return true;
+            } else if (answer === 'lower' && leftNumber > rightNumber) {
+                return true;
+            } else if (answer === 'equal' && leftNumber === rightNumber) {
+                return true;
+            }
         }
         return false;
+    }
+
+    static getCurrentMode() {
+        return localStorage.getItem('gameMode') || 'greater';
     }
 
     static incrementRound() {

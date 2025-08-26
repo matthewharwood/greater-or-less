@@ -5,13 +5,14 @@ export class ResultScreen extends HTMLElement {
         this._won = false;
         this._leftNumber = 0;
         this._rightNumber = 0;
+        this._mode = 'greater';
         this._countdownValue = 3;
         this._countdownInterval = null;
         this._onCountdownComplete = null;
     }
 
     static get observedAttributes() {
-        return ['won', 'left-number', 'right-number'];
+        return ['won', 'left-number', 'right-number', 'mode'];
     }
 
     connectedCallback() {
@@ -35,6 +36,9 @@ export class ResultScreen extends HTMLElement {
                 break;
             case 'right-number':
                 this._rightNumber = parseInt(newValue) || 0;
+                break;
+            case 'mode':
+                this._mode = newValue || 'greater';
                 break;
         }
         if (this.shadowRoot) {
@@ -117,35 +121,70 @@ export class ResultScreen extends HTMLElement {
     getExplanation() {
         const num1 = this._leftNumber;
         const num2 = this._rightNumber;
+        const operator = this._mode === 'greater' ? '>' : '<';
         
-        if (num1 > num2) {
-            return `
-                <div class="number-explanation">
-                    <strong>${num1}</strong> is <span class="highlight-red">BIGGER</span> than <strong>${num2}</strong>
-                </div>
-                <div class="statement-result">
-                    So <strong>${num1} > ${num2}</strong> is <span class="highlight-green">TRUE</span> ✅
-                </div>
-            `;
-        } else if (num1 < num2) {
-            return `
-                <div class="number-explanation">
-                    <strong>${num1}</strong> is <span class="highlight-red">SMALLER</span> than <strong>${num2}</strong>
-                </div>
-                <div class="statement-result">
-                    So <strong>${num1} > ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌
-                </div>
-            `;
+        if (this._mode === 'greater') {
+            // Greater than mode explanations
+            if (num1 > num2) {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> is <span class="highlight-red">BIGGER</span> than <strong>${num2}</strong>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-green">TRUE</span> ✅
+                    </div>
+                `;
+            } else if (num1 < num2) {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> is <span class="highlight-red">SMALLER</span> than <strong>${num2}</strong>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> and <strong>${num2}</strong> are <span class="highlight-yellow">THE SAME</span>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌<br>
+                        (They are <span class="highlight-yellow">EQUAL</span>)
+                    </div>
+                `;
+            }
         } else {
-            return `
-                <div class="number-explanation">
-                    <strong>${num1}</strong> and <strong>${num2}</strong> are <span class="highlight-yellow">THE SAME</span>
-                </div>
-                <div class="statement-result">
-                    So <strong>${num1} > ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌<br>
-                    (They are <span class="highlight-yellow">EQUAL</span>)
-                </div>
-            `;
+            // Less than mode explanations
+            if (num1 < num2) {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> is <span class="highlight-red">SMALLER</span> than <strong>${num2}</strong>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-green">TRUE</span> ✅
+                    </div>
+                `;
+            } else if (num1 > num2) {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> is <span class="highlight-red">BIGGER</span> than <strong>${num2}</strong>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="number-explanation">
+                        <strong>${num1}</strong> and <strong>${num2}</strong> are <span class="highlight-yellow">THE SAME</span>
+                    </div>
+                    <div class="statement-result">
+                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌<br>
+                        (They are <span class="highlight-yellow">EQUAL</span>)
+                    </div>
+                `;
+            }
         }
     }
 

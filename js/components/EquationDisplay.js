@@ -6,10 +6,11 @@ export class EquationDisplay extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this._leftNumber = 0;
         this._rightNumber = 0;
+        this._mode = 'greater';
     }
 
     static get observedAttributes() {
-        return ['left-number', 'right-number'];
+        return ['left-number', 'right-number', 'mode'];
     }
 
     connectedCallback() {
@@ -23,6 +24,9 @@ export class EquationDisplay extends HTMLElement {
                 break;
             case 'right-number':
                 this._rightNumber = parseInt(newValue) || 0;
+                break;
+            case 'mode':
+                this._mode = newValue || 'greater';
                 break;
         }
         if (this.shadowRoot) {
@@ -90,7 +94,7 @@ export class EquationDisplay extends HTMLElement {
                         text-color="#e74c3c"
                         disabled>
                     </game-button>
-                    <span class="operator">></span>
+                    <span class="operator">${this._mode === 'greater' ? '>' : '<'}</span>
                     <game-button 
                         value="${this._rightNumber}"
                         variant="number"
@@ -99,7 +103,7 @@ export class EquationDisplay extends HTMLElement {
                     </game-button>
                 </div>
                 <div class="english-text">
-                    "${this._leftNumber} is greater than ${this._rightNumber}"
+                    "${this._leftNumber} is ${this._mode === 'greater' ? 'greater than' : 'less than'} ${this._rightNumber}"
                 </div>
             </div>
         `;

@@ -17,10 +17,30 @@ export class GameContainer extends HTMLElement {
         this._firstClick = true;
         this._buttonsEnabled = false;
         this._showingResult = false;
+        this._mode = GameLogic.getCurrentMode();
     }
 
     connectedCallback() {
         this.startNewGame();
+        this.listenForModeChanges();
+    }
+    
+    listenForModeChanges() {
+        // Listen for mode changes from the mode selector
+        document.addEventListener('mode-change', (e) => {
+            this._mode = e.detail.mode;
+            // Update the equation display without resetting the game
+            if (!this._showingResult) {
+                this.updateEquationDisplay();
+            }
+        });
+    }
+    
+    updateEquationDisplay() {
+        const equationDisplay = this.shadowRoot.querySelector('equation-display');
+        if (equationDisplay) {
+            equationDisplay.setAttribute('mode', this._mode);
+        }
     }
 
     startNewGame() {
@@ -37,7 +57,7 @@ export class GameContainer extends HTMLElement {
         
         // Speak the problem after a short delay
         setTimeout(() => {
-            AudioService.speakProblem(this._leftNumber, this._rightNumber);
+            AudioService.speakProblem(this._leftNumber, this._rightNumber, this._mode);
         }, 500);
         
         // Enable buttons after 2 seconds
@@ -103,7 +123,8 @@ export class GameContainer extends HTMLElement {
             <div class="game-content">
                 <equation-display 
                     left-number="${this._leftNumber}"
-                    right-number="${this._rightNumber}">
+                    right-number="${this._rightNumber}"
+                    mode="${this._mode}">
                 </equation-display>
                 
                 <div class="action-buttons">
@@ -158,11 +179,19 @@ export class GameContainer extends HTMLElement {
     }
 
     handleGuess(guess) {
-        const isCorrect = GameLogic.evaluateAnswer(this._leftNumber, this._rightNumber, guess);
+        const isCorrect = GameLogic.evaluateAnswer(this._leftNumber, this._rightNumber, guess, this._mode);
         
         // Show tooltip on first incorrect click
         if (this._firstClick && !isCorrect) {
-            this.showTooltip("Look at the dots! Is 🔴 RED bigger than 🟢 GREEN? Right side = bigger!");
+            let tooltipMessage;
+            if (this._mode === 'greater') {
+                // Greater than mode - red needs to be bigger (on the right)
+                tooltipMessage = "Look at the dots! If 🔴 RED is on the RIGHT, it's BIGGER!";
+            } else {
+                // Less than mode - red needs to be smaller (on the left)
+                tooltipMessage = "Look at the dots! If 🔴 RED is on the LEFT, it's SMALLER!";
+            }
+            this.showTooltip(tooltipMessage);
             this._firstClick = false;
             
             // If number line was hidden, show it now to help
@@ -214,7 +243,7 @@ export class GameContainer extends HTMLElement {
             
             // Speak explanation after delay
             setTimeout(() => {
-                AudioService.speakExplanation(this._leftNumber, this._rightNumber);
+                AudioService.speakExplanation(this._leftNumber, this._rightNumber, this._mode);
             }, 1000);
         }
         
@@ -237,6 +266,7 @@ export class GameContainer extends HTMLElement {
         resultScreen.setAttribute('won', won.toString());
         resultScreen.setAttribute('left-number', this._leftNumber.toString());
         resultScreen.setAttribute('right-number', this._rightNumber.toString());
+        resultScreen.setAttribute('mode', this._mode);
         
         resultScreen.onCountdownComplete = () => {
             location.reload();

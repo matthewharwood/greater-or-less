@@ -76,11 +76,19 @@ export class ProgressBar extends HTMLElement {
     }
     
     attachEventListeners() {
-        // Add click handler to counter for manual reset
+        // Add double-tap handler to counter for manual reset
         const counter = this.shadowRoot.querySelector('.streak-counter');
         if (counter) {
-            counter.addEventListener('click', () => {
-                this.manualReset();
+            let lastTap = 0;
+            counter.addEventListener('click', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 500 && tapLength > 0) {
+                    // Double tap detected
+                    this.manualReset();
+                    e.preventDefault();
+                }
+                lastTap = currentTime;
             });
         }
     }
@@ -300,18 +308,9 @@ export class ProgressBar extends HTMLElement {
                     pointer-events: auto;
                     z-index: 12;
                     transition: transform 0.3s ease, background 0.3s ease;
-                    cursor: pointer;
+                    cursor: default;
                     user-select: none;
-                }
-                
-                .streak-counter:hover {
-                    background: rgba(255, 255, 255, 1);
-                    transform: scale(1.05);
-                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-                }
-                
-                .streak-counter:active {
-                    transform: scale(0.95);
+                    -webkit-tap-highlight-color: transparent;
                 }
                 
                 .streak-counter.resetting {
@@ -343,16 +342,6 @@ export class ProgressBar extends HTMLElement {
                 }
                 
                 
-                .streak-counter::after {
-                    content: '🔄';
-                    margin-left: 8px;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-                
-                .streak-counter:hover::after {
-                    opacity: 0.7;
-                }
                 
                 @media (max-width: 480px) {
                     .streak-counter {
