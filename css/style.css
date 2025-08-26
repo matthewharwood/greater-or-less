@@ -109,6 +109,8 @@ body {
   text-align: center;
   max-width: 400px;
   width: 100%;
+  position: relative;
+  z-index: 10;
 }
 
 #game-title {
@@ -119,7 +121,7 @@ body {
   margin: 0;
   color: #1a1a1a;
   font-size: 2rem;
-  z-index: 100;
+  z-index: 15;
   background: rgba(255, 255, 255, 0.9);
   padding: 10px 20px;
   border-radius: 12px;
@@ -160,6 +162,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
 #number-line {
@@ -169,6 +173,8 @@ body {
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
   max-width: 90%;
   height: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .pulse-overlay {

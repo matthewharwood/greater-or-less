@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Both Versions - Higher Or Lower Game</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .version-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .version-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 1;
+            transition: transform 0.3s ease;
+        }
+        .version-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .version-card h2 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .version-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .version-card a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .version-card a:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .status.working {
+            color: #27ae60;
+        }
+        .status.testing {
+            color: #f39c12;
+        }
+        .comparison {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .comparison h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .comparison ul {
+            color: #666;
+            line-height: 1.8;
+        }
+        .comparison li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Higher Or Lower Game - Version Testing</h1>
+    
+    <div class="version-links">
+        <div class="version-card">
+            <h2>Web Components Version</h2>
+            <p>Modern architecture with modular ES6 modules (Now Main)</p>
+            <a href="index.html" target="_blank">Open Main Version</a>
+            <div class="status working">✅ Active Version</div>
+        </div>
+        
+        <div class="version-card">
+            <h2>Original Monolithic Version</h2>
+            <p>Single file architecture with 603 lines (Backup)</p>
+            <a href="index-original.html" target="_blank">Open Original</a>
+            <div class="status working">📦 Backup Version</div>
+        </div>
+    </div>
+    
+    <div class="comparison">
+        <h3>📋 Features to Test</h3>
+        <ul>
+            <li><strong>Game Logic:</strong> Random numbers generation (every 5th round should have equal numbers)</li>
+            <li><strong>Visual Feedback:</strong> Number line showing positions of both numbers</li>
+            <li><strong>Button States:</strong> 2-second delay before buttons become clickable</li>
+            <li><strong>Tooltips:</strong> Warning tooltip on first wrong click</li>
+            <li><strong>Win State:</strong> Confetti animation, win sound, 3-second countdown</li>
+            <li><strong>Lose State:</strong> Explanation well, fail sound, 15-second countdown</li>
+            <li><strong>Audio:</strong> Text-to-speech for problems and explanations</li>
+            <li><strong>Visual Effects:</strong> Green/red pulse overlays</li>
+            <li><strong>Responsive Design:</strong> Mobile-friendly layout</li>
+        </ul>
+    </div>
+    
+    <div class="comparison">
+        <h3>🔍 Architecture Comparison</h3>
+        <ul>
+            <li><strong>Web Components (Main):</strong> 8 Web Components + 2 services with Shadow DOM encapsulation</li>
+            <li><strong>Original (Backup):</strong> Single app-original.js file with direct DOM manipulation</li>
+            <li><strong>Both versions:</strong> Use the same CSS styles and game assets</li>
+        </ul>
+    </div>
+    
+    <div class="comparison">
+        <h3>✨ File Structure</h3>
+        <ul>
+            <li><strong>index.html</strong> - Main game (Web Components version)</li>
+            <li><strong>index-original.html</strong> - Backup of original monolithic version</li>
+            <li><strong>js/app.js</strong> - Main entry point (loads all components)</li>
+            <li><strong>js/app-original.js</strong> - Original 603-line version</li>
+            <li><strong>js/components/</strong> - 8 Web Components</li>
+            <li><strong>js/services/</strong> - GameLogic and AudioService</li>
+        </ul>
+    </div>
+</body>
+</html>
