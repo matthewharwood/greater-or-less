@@ -1,3 +1,5 @@
+import { TranslationService } from '../services/TranslationService.js';
+
 export class PlayerNameInput extends HTMLElement {
     constructor() {
         super();
@@ -17,11 +19,22 @@ export class PlayerNameInput extends HTMLElement {
             this._playerName = this.randomNames[Math.floor(Math.random() * this.randomNames.length)];
             localStorage.setItem('playerName', this._playerName);
         }
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            this.render();
+            this.attachEventListeners();
+        };
     }
 
     connectedCallback() {
         this.render();
         this.attachEventListeners();
+        TranslationService.addListener(this._languageListener);
+    }
+    
+    disconnectedCallback() {
+        TranslationService.removeListener(this._languageListener);
     }
 
     get playerName() {
@@ -216,15 +229,15 @@ export class PlayerNameInput extends HTMLElement {
             </style>
             
             <div class="name-container">
-                <div class="name-label">NAME:</div>
+                <div class="name-label">${TranslationService.get('name')}</div>
                 <input 
                     type="text" 
                     class="name-input" 
-                    placeholder="Enter name..."
+                    placeholder="${TranslationService.get('enterName')}"
                     value="${this._playerName}"
                     maxlength="20"
                 />
-                <span class="save-indicator">✓ SAVED</span>
+                <span class="save-indicator">${TranslationService.get('saved')}</span>
                 <span class="trophy-decoration">🏆</span>
             </div>
         `;

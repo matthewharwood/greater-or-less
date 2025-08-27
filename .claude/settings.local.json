@@ -10,7 +10,8 @@
       "Bash(start index.html)",
       "Bash(npm run build:*)",
       "WebFetch(domain:goshippo.com)",
-      "WebFetch(domain:www.stash.gg)"
+      "WebFetch(domain:www.stash.gg)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

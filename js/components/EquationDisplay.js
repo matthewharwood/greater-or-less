@@ -1,4 +1,5 @@
 import { GameButton } from './GameButton.js';
+import { TranslationService } from '../services/TranslationService.js';
 
 export class EquationDisplay extends HTMLElement {
     constructor() {
@@ -7,6 +8,11 @@ export class EquationDisplay extends HTMLElement {
         this._leftNumber = 0;
         this._rightNumber = 0;
         this._mode = 'greater';
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            this.render();
+        };
     }
 
     static get observedAttributes() {
@@ -15,6 +21,11 @@ export class EquationDisplay extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        TranslationService.addListener(this._languageListener);
+    }
+    
+    disconnectedCallback() {
+        TranslationService.removeListener(this._languageListener);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -238,7 +249,7 @@ export class EquationDisplay extends HTMLElement {
                     </game-button>
                 </div>
                 <div class="english-text">
-                    ${this._leftNumber} is ${this._mode === 'greater' ? 'GREATER THAN' : 'LESS THAN'} ${this._rightNumber}
+                    ${this._leftNumber} ${this._mode === 'greater' ? TranslationService.get('isGreaterThan') : TranslationService.get('isLessThan')} ${this._rightNumber}
                 </div>
             </div>
         `;

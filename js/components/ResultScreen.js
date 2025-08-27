@@ -1,3 +1,5 @@
+import { TranslationService } from '../services/TranslationService.js';
+
 export class ResultScreen extends HTMLElement {
     constructor() {
         super();
@@ -9,6 +11,11 @@ export class ResultScreen extends HTMLElement {
         this._countdownValue = 3;
         this._countdownInterval = null;
         this._onCountdownComplete = null;
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            this.render();
+        };
     }
 
     static get observedAttributes() {
@@ -18,12 +25,14 @@ export class ResultScreen extends HTMLElement {
     connectedCallback() {
         this.render();
         this.startCountdown();
+        TranslationService.addListener(this._languageListener);
     }
 
     disconnectedCallback() {
         if (this._countdownInterval) {
             clearInterval(this._countdownInterval);
         }
+        TranslationService.removeListener(this._languageListener);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -83,105 +92,110 @@ export class ResultScreen extends HTMLElement {
     }
 
     getWinningMessage() {
-        const messages = [
-            "🎉 BINGO YOU WON! 🎉",
-            "⭐ AMAZING! YOU'RE CORRECT! ⭐",
-            "🏆 CHAMPION! WELL DONE! 🏆",
-            "🎯 PERFECT SHOT! YOU GOT IT! 🎯",
-            "🌟 BRILLIANT! FANTASTIC WORK! 🌟",
-            "🚀 AWESOME! YOU'RE ON FIRE! 🚀",
-            "💎 EXCELLENT! SUPER SMART! 💎",
-            "🎊 HOORAY! MAGNIFICENT! 🎊",
-            "🥳 INCREDIBLE! YOU NAILED IT! 🥳",
-            "🏅 OUTSTANDING! GREAT JOB! 🏅",
-            "⚡ SPECTACULAR! WELL PLAYED! ⚡",
-            "🎈 FANTASTIC! YOU'RE A STAR! 🎈"
-        ];
-        return messages[Math.floor(Math.random() * messages.length)];
+        return TranslationService.getWinMessage();
     }
 
     getEncouragementMessage() {
-        const messages = [
-            "🤔 Think more carefully next time!",
-            "⏰ Take your time to compare the numbers!",
-            "👀 Look at each number closely before choosing!",
-            "📏 Remember: bigger numbers are greater than smaller ones!",
-            "🐌 Don't rush - think it through!",
-            "🧠 Use your brain power to solve this!",
-            "👣 Compare the numbers step by step!",
-            "🚦 Slow down and think about which is bigger!",
-            "💪 Practice makes perfect - keep trying!",
-            "🎯 Focus on the numbers before clicking!",
-            "😮‍💨 Take a deep breath and think carefully!",
-            "⭐ You can do better - concentrate harder!"
-        ];
-        return messages[Math.floor(Math.random() * messages.length)];
+        return TranslationService.getEncouragementMessage();
     }
 
     getExplanation() {
         const num1 = this._leftNumber;
         const num2 = this._rightNumber;
         const operator = this._mode === 'greater' ? '>' : '<';
+        const lang = TranslationService.getCurrentLanguage();
         
         if (this._mode === 'greater') {
             // Greater than mode explanations
             if (num1 > num2) {
+                const biggerText = lang === 'ko' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('isBigger')} <strong>${num2}</strong>${TranslationService.get('biggerThan', lang)}` :
+                    lang === 'ja' ?
+                    `<strong>${num1}</strong>${TranslationService.get('isBigger')}<strong>${num2}</strong>${TranslationService.get('biggerThan', lang)}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('isBigger')} <strong>${num2}</strong>`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> is <span class="highlight-red">BIGGER</span> than <strong>${num2}</strong>
+                        ${biggerText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-green">TRUE</span> ✅
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isTrue')} ✅
                     </div>
                 `;
             } else if (num1 < num2) {
+                const smallerText = lang === 'ko' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('isSmaller')} <strong>${num2}</strong>${TranslationService.get('smallerThan', lang)}` :
+                    lang === 'ja' ?
+                    `<strong>${num1}</strong>${TranslationService.get('isSmaller')}<strong>${num2}</strong>${TranslationService.get('smallerThan', lang)}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('isSmaller')} <strong>${num2}</strong>`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> is <span class="highlight-red">SMALLER</span> than <strong>${num2}</strong>
+                        ${smallerText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isFalse')} ❌
                     </div>
                 `;
             } else {
+                const equalText = lang === 'ko' || lang === 'ja' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('areSame')}<strong>${num2}</strong>${TranslationService.get('areEqual')}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('areSame')} <strong>${num2}</strong> ${TranslationService.get('areEqual')}`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> and <strong>${num2}</strong> are <span class="highlight-yellow">THE SAME</span>
+                        ${equalText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌<br>
-                        (They are <span class="highlight-yellow">EQUAL</span>)
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isFalse')} ❌<br>
+                        ${TranslationService.get('theyAreEqual')}
                     </div>
                 `;
             }
         } else {
             // Less than mode explanations
             if (num1 < num2) {
+                const smallerText = lang === 'ko' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('isSmaller')} <strong>${num2}</strong>${TranslationService.get('smallerThan', lang)}` :
+                    lang === 'ja' ?
+                    `<strong>${num1}</strong>${TranslationService.get('isSmaller')}<strong>${num2}</strong>${TranslationService.get('smallerThan', lang)}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('isSmaller')} <strong>${num2}</strong>`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> is <span class="highlight-red">SMALLER</span> than <strong>${num2}</strong>
+                        ${smallerText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-green">TRUE</span> ✅
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isTrue')} ✅
                     </div>
                 `;
             } else if (num1 > num2) {
+                const biggerText = lang === 'ko' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('isBigger')} <strong>${num2}</strong>${TranslationService.get('biggerThan', lang)}` :
+                    lang === 'ja' ?
+                    `<strong>${num1}</strong>${TranslationService.get('isBigger')}<strong>${num2}</strong>${TranslationService.get('biggerThan', lang)}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('isBigger')} <strong>${num2}</strong>`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> is <span class="highlight-red">BIGGER</span> than <strong>${num2}</strong>
+                        ${biggerText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isFalse')} ❌
                     </div>
                 `;
             } else {
+                const equalText = lang === 'ko' || lang === 'ja' ? 
+                    `<strong>${num1}</strong>${TranslationService.get('areSame')}<strong>${num2}</strong>${TranslationService.get('areEqual')}` :
+                    `<strong>${num1}</strong> ${TranslationService.get('areSame')} <strong>${num2}</strong> ${TranslationService.get('areEqual')}`;
+                
                 return `
                     <div class="number-explanation">
-                        <strong>${num1}</strong> and <strong>${num2}</strong> are <span class="highlight-yellow">THE SAME</span>
+                        ${equalText}
                     </div>
                     <div class="statement-result">
-                        So <strong>${num1} ${operator} ${num2}</strong> is <span class="highlight-red">FALSE</span> ❌<br>
-                        (They are <span class="highlight-yellow">EQUAL</span>)
+                        ${TranslationService.get('soStatement')} <strong>${num1} ${operator} ${num2}</strong> ${TranslationService.get('isFalse')} ❌<br>
+                        ${TranslationService.get('theyAreEqual')}
                     </div>
                 `;
             }
@@ -454,7 +468,7 @@ export class ResultScreen extends HTMLElement {
                 }
             </style>
             <div class="result-content">
-                <h2>❌ WRONG! ❌</h2>
+                <h2>${TranslationService.get('wrong')}</h2>
                 <div class="explanation-well">
                     <div class="explanation-icon">📚</div>
                     ${this.getExplanation()}

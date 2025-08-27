@@ -1,3 +1,5 @@
+import { TranslationService } from '../services/TranslationService.js';
+
 export class ModeSelector extends HTMLElement {
     constructor() {
         super();
@@ -5,6 +7,13 @@ export class ModeSelector extends HTMLElement {
         this._mode = localStorage.getItem('gameMode') || 'greater';
         this._onChange = null;
         this._isInitialLoad = true;
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            this.render();
+            this.attachEventListeners();
+            this.updateButtons();
+        };
     }
 
     connectedCallback() {
@@ -14,6 +23,12 @@ export class ModeSelector extends HTMLElement {
         this.updateButtons();
         // Dispatch initial mode
         this.dispatchModeChange();
+        // Listen for language changes
+        TranslationService.addListener(this._languageListener);
+    }
+    
+    disconnectedCallback() {
+        TranslationService.removeListener(this._languageListener);
     }
 
     get mode() {
@@ -161,7 +176,7 @@ export class ModeSelector extends HTMLElement {
                 }
                 
                 .mode-selector::before {
-                    content: 'MODE';
+                    content: '${TranslationService.get('mode')}';
                     position: absolute;
                     top: -35px;
                     left: 50%;
@@ -261,7 +276,7 @@ export class ModeSelector extends HTMLElement {
                 
                 /* Add brutal hover indicator */
                 .mode-btn:hover:not(.active)::after {
-                    content: '👈 PICK ME';
+                    content: '${TranslationService.get('pickMe')}';
                     position: absolute;
                     bottom: -35px;
                     left: 50%;
@@ -484,11 +499,11 @@ export class ModeSelector extends HTMLElement {
             
             <div class="mode-selector">
                 <button id="greater-btn" class="mode-btn ${this._mode === 'greater' ? 'active' : ''}">
-                    Greater
+                    ${TranslationService.get('greater')}
                     <span class="operator-symbol">></span>
                 </button>
                 <button id="less-btn" class="mode-btn ${this._mode === 'less' ? 'active' : ''}">
-                    Less
+                    ${TranslationService.get('less')}
                     <span class="operator-symbol"><</span>
                 </button>
             </div>

@@ -1,3 +1,5 @@
+import { TranslationService } from '../services/TranslationService.js';
+
 export class NumberLine extends HTMLElement {
     constructor() {
         super();
@@ -6,6 +8,11 @@ export class NumberLine extends HTMLElement {
         this._rightNumber = 0;
         this._canvas = null;
         this._ctx = null;
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            this.draw();
+        };
     }
 
     static get observedAttributes() {
@@ -16,6 +23,11 @@ export class NumberLine extends HTMLElement {
         this.render();
         this.setupCanvas();
         this.draw();
+        TranslationService.addListener(this._languageListener);
+    }
+    
+    disconnectedCallback() {
+        TranslationService.removeListener(this._languageListener);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -454,7 +466,7 @@ export class NumberLine extends HTMLElement {
         ctx.font = 'bold 14px "Roboto", sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('SMALLER', 0, 0);
+        ctx.fillText(TranslationService.get('smaller').toUpperCase(), 0, 0);
         ctx.restore();
 
         ctx.restore();
@@ -525,7 +537,7 @@ export class NumberLine extends HTMLElement {
         ctx.font = 'bold 14px "Roboto", sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('BIGGER', 0, 0);
+        ctx.fillText(TranslationService.get('bigger').toUpperCase(), 0, 0);
         ctx.restore();
 
         // Add decorative dots around arrows for extra Neo-Brutalist flair
@@ -579,7 +591,7 @@ export class NumberLine extends HTMLElement {
         ctx.translate(leftHandX, handY);
 
         // Draw label background above hand
-        const leftLabelText = 'LEFT';
+        const leftLabelText = TranslationService.get('left').toUpperCase();
         ctx.font = 'bold 14px "Roboto", sans-serif';
         const leftTextWidth = ctx.measureText(leftLabelText).width;
         const boxPadding = 8;
@@ -626,7 +638,7 @@ export class NumberLine extends HTMLElement {
         ctx.translate(rightHandX, handY);
 
         // Draw label background above hand
-        const rightLabelText = 'RIGHT';
+        const rightLabelText = TranslationService.get('right').toUpperCase();
         ctx.font = 'bold 14px "Roboto", sans-serif';
         const rightTextWidth = ctx.measureText(rightLabelText).width;
         const rightBoxWidth = rightTextWidth + (boxPadding * 2);

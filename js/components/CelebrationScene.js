@@ -1,15 +1,24 @@
+import { TranslationService } from '../services/TranslationService.js';
+
 export class CelebrationScene extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         this._duration = 12000;
-        // Get player name from localStorage, default to CHAMPION if not set
+        // Get player name from localStorage, default to translated CHAMPION if not set
         const storedName = localStorage.getItem('playerName');
-        this._playerName = storedName && storedName.trim() ? storedName.toUpperCase() : 'CHAMPION';
+        this._playerName = storedName && storedName.trim() ? storedName.toUpperCase() : TranslationService.get('champion').toUpperCase();
         this._fireworks = [];
         this._animationId = null;
         this._canvas = null;
         this._ctx = null;
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            const storedName = localStorage.getItem('playerName');
+            this._playerName = storedName && storedName.trim() ? storedName.toUpperCase() : TranslationService.get('champion').toUpperCase();
+            this.render();
+        };
     }
 
     static get observedAttributes() {
@@ -20,12 +29,14 @@ export class CelebrationScene extends HTMLElement {
         this.render();
         this.setupCanvas();
         this.startCelebration();
+        TranslationService.addListener(this._languageListener);
     }
 
     disconnectedCallback() {
         if (this._animationId) {
             cancelAnimationFrame(this._animationId);
         }
+        TranslationService.removeListener(this._languageListener);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -532,11 +543,11 @@ export class CelebrationScene extends HTMLElement {
                 <div class="brutal-shape brutal-shape-4"></div>
                 <div class="message-container">
                     <div class="stars">★ ★ ★ ★ ★</div>
-                    <div class="main-message" data-text="INCREDIBLE!">INCREDIBLE!</div>
-                    <div class="sub-message">YOU CRUSHED IT</div>
+                    <div class="main-message" data-text="${TranslationService.get('incredible').toUpperCase()}">${TranslationService.get('incredible').toUpperCase()}</div>
+                    <div class="sub-message">${TranslationService.get('youCrushedIt').toUpperCase()}</div>
                     <div class="player-name">${this._playerName}</div>
                     <div class="achievement-badge">
-                        🏆 10 STREAK LEGEND 🏆
+                        🏆 ${TranslationService.get('streakLegend').toUpperCase()} 🏆
                     </div>
                     <div class="stars">★ ★ ★ ★ ★</div>
                 </div>

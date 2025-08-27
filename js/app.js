@@ -13,6 +13,7 @@ import './components/TextToSpeechToggle.js';
 import './components/MusicToggle.js';
 import './components/GameContainer.js';
 import './components/PlayerNameInput.js';
+import './components/LanguageSelector.js';
 
 // Import services
 import './services/GameLogic.js';

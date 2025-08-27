@@ -7,6 +7,7 @@ import { PulseOverlay } from './PulseOverlay.js';
 import { ConfettiCanvas } from './ConfettiCanvas.js';
 import { GameLogic } from '../services/GameLogic.js';
 import { AudioService } from '../services/AudioService.js';
+import { TranslationService } from '../services/TranslationService.js';
 
 export class GameContainer extends HTMLElement {
     constructor() {
@@ -18,11 +19,23 @@ export class GameContainer extends HTMLElement {
         this._buttonsEnabled = false;
         this._showingResult = false;
         this._mode = GameLogic.getCurrentMode();
+        
+        // Listen for language changes
+        this._languageListener = () => {
+            if (!this._showingResult) {
+                this.render();
+            }
+        };
     }
 
     connectedCallback() {
         this.startNewGame();
         this.listenForModeChanges();
+        TranslationService.addListener(this._languageListener);
+    }
+    
+    disconnectedCallback() {
+        TranslationService.removeListener(this._languageListener);
     }
     
     listenForModeChanges() {
@@ -161,19 +174,19 @@ export class GameContainer extends HTMLElement {
                 <div class="action-buttons">
                     <game-button 
                         id="true-btn"
-                        value="True"
+                        value="${TranslationService.get('true')}"
                         variant="action"
                         ${this._buttonsEnabled ? '' : 'disabled'}>
                     </game-button>
                     <game-button 
                         id="false-btn"
-                        value="False"
+                        value="${TranslationService.get('false')}"
                         variant="action"
                         ${this._buttonsEnabled ? '' : 'disabled'}>
                     </game-button>
                     <game-button 
                         id="equal-btn"
-                        value="Equal"
+                        value="${TranslationService.get('equal')}"
                         variant="action"
                         ${this._buttonsEnabled ? '' : 'disabled'}>
                     </game-button>
@@ -217,10 +230,10 @@ export class GameContainer extends HTMLElement {
             let tooltipMessage;
             if (this._mode === 'greater') {
                 // Greater than mode - red needs to be bigger (on the right)
-                tooltipMessage = "Look at the dots! If 🔴 RED is on the RIGHT, it's BIGGER!";
+                tooltipMessage = TranslationService.get('tooltipGreater');
             } else {
                 // Less than mode - red needs to be smaller (on the left)
-                tooltipMessage = "Look at the dots! If 🔴 RED is on the LEFT, it's SMALLER!";
+                tooltipMessage = TranslationService.get('tooltipLess');
             }
             this.showTooltip(tooltipMessage);
             this._firstClick = false;
