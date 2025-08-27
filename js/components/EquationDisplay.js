@@ -26,7 +26,12 @@ export class EquationDisplay extends HTMLElement {
                 this._rightNumber = parseInt(newValue) || 0;
                 break;
             case 'mode':
+                const previousMode = this._mode;
                 this._mode = newValue || 'greater';
+                // Mark that mode has changed for animation
+                if (previousMode && previousMode !== this._mode) {
+                    this._modeJustChanged = true;
+                }
                 break;
         }
         if (this.shadowRoot) {
@@ -51,14 +56,18 @@ export class EquationDisplay extends HTMLElement {
     }
 
     render() {
+        // Store the animation state before render
+        const shouldAnimate = this._modeJustChanged;
+
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: block;
                     text-align: center;
                     position: relative;
+                    z-index: 12;
                 }
-                
+
                 .equation-container {
                     display: flex;
                     flex-direction: column;
@@ -66,7 +75,7 @@ export class EquationDisplay extends HTMLElement {
                     gap: 24px;
                     position: relative;
                 }
-                
+
                 .number-row {
                     display: flex;
                     align-items: center;
@@ -74,7 +83,7 @@ export class EquationDisplay extends HTMLElement {
                     margin-bottom: 16px;
                     position: relative;
                 }
-                
+
                 .operator {
                     font-size: 64px;
                     font-weight: 900;
@@ -86,8 +95,42 @@ export class EquationDisplay extends HTMLElement {
                     display: inline-block;
                     position: relative;
                     z-index: 10;
+                    transform-origin: center center;
+                    transition: none;
                 }
-                
+
+                /* Falling animation when mode changes */
+                .operator.falling {
+                    animation: brutal-operator-fall 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+
+                @keyframes brutal-operator-fall {
+                    0% {
+                        transform: rotate(-5deg) scale(4) translateY(-100px);
+                        opacity: 0;
+                        filter: blur(2px) drop-shadow(0 40px 20px rgba(0,0,0,0.4));
+                    }
+                    20% {
+                        opacity: 1;
+                        filter: blur(0px) drop-shadow(0 30px 15px rgba(0,0,0,0.3));
+                    }
+                    60% {
+                        transform: rotate(-5deg) scale(1.5) translateY(0);
+                        filter: drop-shadow(0 10px 8px rgba(0,0,0,0.2));
+                    }
+                    80% {
+                        transform: rotate(-5deg) scale(1.1) translateY(5px);
+                        filter: drop-shadow(0 5px 4px rgba(0,0,0,0.15));
+                    }
+                    90% {
+                        transform: rotate(-5deg) scale(1.25) translateY(-2px);
+                    }
+                    100% {
+                        transform: rotate(-5deg) scale(1.2) translateY(0);
+                        filter: drop-shadow(0 4px 2px rgba(0,0,0,0.1));
+                    }
+                }
+
                 .operator::before {
                     content: '';
                     position: absolute;
@@ -99,8 +142,35 @@ export class EquationDisplay extends HTMLElement {
                     transform: translate(-50%, -50%) rotate(45deg);
                     z-index: -1;
                     border: 4px solid #000;
+                    transition: all 0.3s ease;
                 }
-                
+
+                /* Background grows during fall */
+                .operator.falling::before {
+                    animation: brutal-operator-bg-pulse 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+
+                @keyframes brutal-operator-bg-pulse {
+                    0% {
+                        transform: translate(-50%, -50%) rotate(45deg) scale(3);
+                        background: #fbbf24;
+                        opacity: 0;
+                    }
+                    20% {
+                        opacity: 0.5;
+                    }
+                    60% {
+                        transform: translate(-50%, -50%) rotate(45deg) scale(1.5);
+                        background: #fb7185;
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+                        background: #fb7185;
+                        opacity: 1;
+                    }
+                }
+
                 .english-text {
                     font-size: 24px;
                     color: #000;
@@ -117,7 +187,7 @@ export class EquationDisplay extends HTMLElement {
                     display: inline-block;
                     position: relative;
                 }
-                
+
                 .english-text::after {
                     content: '';
                     position: absolute;
@@ -135,17 +205,17 @@ export class EquationDisplay extends HTMLElement {
                     z-index: -1;
                     opacity: 0.3;
                 }
-                
+
                 @media (max-width: 479px) {
                     .operator {
                         font-size: 48px;
                     }
-                    
+
                     .english-text {
                         font-size: 18px;
                         padding: 12px 24px;
                     }
-                    
+
                     .number-row {
                         gap: 16px;
                     }
@@ -153,14 +223,14 @@ export class EquationDisplay extends HTMLElement {
             </style>
             <div class="equation-container">
                 <div class="number-row">
-                    <game-button 
+                    <game-button
                         value="${this._leftNumber}"
                         variant="number"
                         text-color="#dc2626"
                         disabled>
                     </game-button>
-                    <span class="operator">${this._mode === 'greater' ? '>' : '<'}</span>
-                    <game-button 
+                    <span class="operator${shouldAnimate ? ' falling' : ''}">${this._mode === 'greater' ? '>' : '<'}</span>
+                    <game-button
                         value="${this._rightNumber}"
                         variant="number"
                         text-color="#059669"
@@ -172,6 +242,15 @@ export class EquationDisplay extends HTMLElement {
                 </div>
             </div>
         `;
+
+        // Reset the flag after rendering
+        if (shouldAnimate) {
+            this._modeJustChanged = false;
+            // Play a sound when the operator drops
+            import('../services/AudioService.js').then(module => {
+                module.AudioService.playHoverSound();
+            });
+        }
     }
 }
 

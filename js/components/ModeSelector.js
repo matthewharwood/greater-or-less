@@ -4,6 +4,7 @@ export class ModeSelector extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this._mode = localStorage.getItem('gameMode') || 'greater';
         this._onChange = null;
+        this._isInitialLoad = true;
     }
 
     connectedCallback() {
@@ -71,20 +72,51 @@ export class ModeSelector extends HTMLElement {
         const selector = this.shadowRoot.querySelector('.mode-selector');
         
         if (greaterBtn && lessBtn) {
-            // Add changing animation
-            if (selector) {
-                selector.classList.add('changing');
-                setTimeout(() => {
-                    selector.classList.remove('changing');
-                }, 300);
+            // If this is the initial load, just set the button states without animation
+            if (this._isInitialLoad) {
+                this._isInitialLoad = false;
+                if (this._mode === 'greater') {
+                    greaterBtn.classList.add('active');
+                    lessBtn.classList.remove('active');
+                } else {
+                    lessBtn.classList.add('active');
+                    greaterBtn.classList.remove('active');
+                }
+                return;
             }
             
-            if (this._mode === 'greater') {
-                greaterBtn.classList.add('active');
-                lessBtn.classList.remove('active');
+            // Add fade-out and spin-in animation for mode changes
+            if (selector) {
+                selector.classList.add('fade-out');
+                
+                // Wait for fade out, then update buttons
+                setTimeout(() => {
+                    if (this._mode === 'greater') {
+                        greaterBtn.classList.add('active');
+                        lessBtn.classList.remove('active');
+                    } else {
+                        lessBtn.classList.add('active');
+                        greaterBtn.classList.remove('active');
+                    }
+                    
+                    // Remove fade-out and add spin-in
+                    selector.classList.remove('fade-out');
+                    selector.classList.add('spin-in');
+                    
+                    // Clean up after animation completes
+                    setTimeout(() => {
+                        selector.classList.remove('spin-in');
+                    }, 500);
+                }, 300); // Fade out duration
             } else {
-                lessBtn.classList.add('active');
-                greaterBtn.classList.remove('active');
+                // Fallback if selector not found
+                if (this._mode === 'greater') {
+                    greaterBtn.classList.add('active');
+                    lessBtn.classList.remove('active');
+                } else {
+                    lessBtn.classList.add('active');
+                    greaterBtn.classList.remove('active');
+                }
             }
         }
     }
@@ -408,27 +440,44 @@ export class ModeSelector extends HTMLElement {
                     }
                 }
                 
-                /* Glow effect on mode change */
-                .mode-selector.changing {
-                    animation: brutal-mode-change 0.3s ease-out;
+                /* Fade out animation */
+                .mode-selector.fade-out {
+                    animation: brutal-fade-out 0.3s ease-out forwards;
                 }
                 
-                @keyframes brutal-mode-change {
-                    0% { 
-                        box-shadow: 
-                            10px 10px 0px #000,
-                            10px 10px 0px 8px #fbbf24;
+                @keyframes brutal-fade-out {
+                    0% {
+                        opacity: 1;
+                        transform: scale(1) rotate(0deg);
+                        filter: blur(0px);
                     }
-                    50% { 
-                        box-shadow: 
-                            15px 15px 0px #000,
-                            15px 15px 0px 8px #fb7185,
-                            0 0 30px rgba(251, 113, 133, 0.5);
+                    100% {
+                        opacity: 0;
+                        transform: scale(0.8) rotate(-10deg);
+                        filter: blur(4px);
                     }
-                    100% { 
-                        box-shadow: 
-                            10px 10px 0px #000,
-                            10px 10px 0px 8px #fbbf24;
+                }
+                
+                /* Spin in animation */
+                .mode-selector.spin-in {
+                    animation: brutal-spin-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+                }
+                
+                @keyframes brutal-spin-in {
+                    0% {
+                        opacity: 0;
+                        transform: scale(0.3) rotate(-360deg);
+                        filter: blur(5px);
+                    }
+                    50% {
+                        opacity: 1;
+                        transform: scale(1.1) rotate(-180deg);
+                        filter: blur(0px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: scale(1) rotate(0deg);
+                        filter: blur(0px);
                     }
                 }
             </style>
