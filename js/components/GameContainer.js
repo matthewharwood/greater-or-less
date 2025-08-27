@@ -108,15 +108,45 @@ export class GameContainer extends HTMLElement {
                 .action-buttons {
                     display: flex;
                     flex-direction: column;
-                    gap: 15px;
+                    gap: 20px;
                     width: 100%;
-                    margin-top: 20px;
+                    margin-top: 30px;
+                    position: relative;
+                    padding: 20px;
+                    background: linear-gradient(
+                        135deg,
+                        #fef3c7 0%,
+                        #fde68a 50%,
+                        #fef3c7 100%
+                    );
+                    border: 5px solid #000;
+                    box-shadow: 8px 8px 0px #000;
+                    transform: rotate(-1deg);
+                }
+                
+                .action-buttons::before {
+                    content: '';
+                    position: absolute;
+                    top: -10px;
+                    left: -10px;
+                    right: -10px;
+                    bottom: -10px;
+                    background: repeating-linear-gradient(
+                        45deg,
+                        #fb7185,
+                        #fb7185 10px,
+                        transparent 10px,
+                        transparent 20px
+                    );
+                    z-index: -1;
+                    opacity: 0.3;
                 }
                 
                 @media (min-width: 480px) {
                     .action-buttons {
                         flex-direction: row;
                         justify-content: center;
+                        transform: rotate(1deg);
                     }
                 }
             </style>

@@ -9,10 +9,11 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&family=Roboto:wght@900&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700;900&family=Roboto:wght@700;900&family=Source+Sans+3:wght@500;700;900&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/neo-brutalist.css">
   <meta name="description" content="Educational number comparison game for kids">
 
   <meta property="og:title" content="Higher Or Lower Game">
@@ -49,7 +50,7 @@
       margin: 0;
       font-family: var(--font-body);
       font-weight: var(--font-weight-normal);
-      padding: var(--space-lg);
+      padding: var(--space-8);
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
@@ -57,25 +58,40 @@
       -ms-user-select: none;
       /* Prevent pinch zoom and double-tap zoom */
       touch-action: manipulation;
+      /* Neo-Brutalist grid background */
+      background-image: 
+        repeating-linear-gradient(0deg, 
+          transparent, 
+          transparent 40px, 
+          var(--color-stone-200) 40px, 
+          var(--color-stone-200) 41px),
+        repeating-linear-gradient(90deg, 
+          transparent, 
+          transparent 40px, 
+          var(--color-stone-200) 40px, 
+          var(--color-stone-200) 41px);
+      background-size: 41px 41px;
     }
     
     .game-card {
       background: var(--color-bg-secondary);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-xl);
+      border: var(--border-brutal-thick);
+      border-radius: var(--rounded-none);
+      box-shadow: var(--shadow-brutal-xl);
       padding: var(--game-card-padding);
       text-align: center;
       max-width: var(--game-card-width);
       width: 100%;
       position: relative;
       z-index: var(--z-index-dropdown);
+      transform: rotate(-0.5deg);
     }
     
     .game-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--space-lg);
+      gap: var(--space-8);
       width: 100%;
       max-width: 800px;
       position: relative;
@@ -88,6 +104,8 @@
   <mode-selector id="mode-selector"></mode-selector>
   
   <progress-bar id="progress-bar"></progress-bar>
+  
+  <tts-toggle id="tts-toggle"></tts-toggle>
   
   <div class="game-wrapper">
     <div class="game-card">

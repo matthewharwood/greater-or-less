@@ -9,6 +9,7 @@ import './components/ResultScreen.js';
 import './components/ProgressBar.js';
 import './components/CelebrationScene.js';
 import './components/ModeSelector.js';
+import './components/TextToSpeechToggle.js';
 import './components/GameContainer.js';
 
 // Import services

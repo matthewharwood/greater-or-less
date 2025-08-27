@@ -70,6 +70,18 @@ export class GameButton extends HTMLElement {
         }
     }
 
+    attachHoverHandler() {
+        const button = this.shadowRoot?.querySelector('button');
+        if (button && !this._disabled) {
+            button.addEventListener('mouseenter', () => {
+                // Import and use AudioService dynamically to avoid circular dependency
+                import('../services/AudioService.js').then(module => {
+                    module.AudioService.playHoverSound();
+                });
+            });
+        }
+    }
+
     render() {
         const styles = this.getStyles();
         
@@ -81,34 +93,52 @@ export class GameButton extends HTMLElement {
         `;
         
         this.attachClickHandler();
+        this.attachHoverHandler();
     }
 
     getStyles() {
         const baseStyles = `
             button {
-                padding: 20px 30px;
-                border: 3px solid;
-                border-radius: 12px;
+                padding: 24px 40px;
+                border: 5px solid #000;
+                border-radius: 0;
                 cursor: pointer;
-                font-size: 18px;
-                font-weight: 600;
-                min-height: 60px;
-                min-width: 100px;
+                font-size: 22px;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                min-height: 70px;
+                min-width: 140px;
                 touch-action: manipulation;
-                transition: all 0.8s ease-in-out;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                transition: all 0.1s ease;
+                font-family: 'Roboto', 'Roboto Mono', monospace;
+                position: relative;
+                transform: rotate(-1deg);
+                box-shadow: 8px 8px 0px #000;
             }
             
             button:disabled {
                 cursor: not-allowed;
-                transform: none;
+                opacity: 1;
+                transform: rotate(-1deg);
+            }
+            
+            button:hover:not(:disabled) {
+                transform: translate(-3px, -3px) rotate(-1deg);
+                box-shadow: 11px 11px 0px #000;
+            }
+            
+            button:active:not(:disabled) {
+                transform: translate(5px, 5px) rotate(0deg);
+                box-shadow: 2px 2px 0px #000;
             }
             
             @media (max-width: 479px) {
                 button {
                     width: 100%;
-                    padding: 18px 20px;
-                    font-size: 16px;
+                    padding: 20px 24px;
+                    font-size: 18px;
+                    min-height: 60px;
                 }
             }
         `;
@@ -116,53 +146,104 @@ export class GameButton extends HTMLElement {
         const variantStyles = {
             primary: `
                 button {
-                    background-color: #007bff;
-                    color: white;
-                    border-color: #0056b3;
-                    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+                    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+                    color: #000;
+                    border-color: #000;
+                    position: relative;
+                }
+                button::before {
+                    content: '';
+                    position: absolute;
+                    top: -3px;
+                    left: -3px;
+                    right: -3px;
+                    bottom: -3px;
+                    background: #fb7185;
+                    z-index: -1;
+                    transform: rotate(1deg);
                 }
                 button:hover:not(:disabled) {
-                    background-color: #0056b3;
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
-                }
-                button:active:not(:disabled) {
-                    transform: translateY(0);
-                    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+                    background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
                 }
                 button:disabled {
-                    background-color: #e9ecef;
-                    color: #6c757d;
-                    border-color: #dee2e6;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    background: #e7e5e4;
+                    color: #78716c;
+                    border-color: #78716c;
+                    box-shadow: 4px 4px 0px #78716c;
+                }
+                button:disabled::before {
+                    display: none;
                 }
             `,
             number: `
                 button {
-                    background-color: #e9ecef;
-                    color: ${this._textColor || '#007bff'};
-                    border-color: #dee2e6;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    background: ${this._textColor === '#dc2626' ? '#fecdd3' : '#a7f3d0'};
+                    color: #000;
+                    border-color: #000;
+                    font-family: 'Roboto Mono', monospace;
+                    font-size: 36px;
+                    font-weight: 900;
                     cursor: not-allowed;
+                    transform: rotate(${this._textColor === '#dc2626' ? '-2' : '2'}deg);
+                    box-shadow: 6px 6px 0px #000;
+                    position: relative;
+                    z-index: 1;
+                }
+                button::after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 120%;
+                    height: 120%;
+                    transform: translate(-50%, -50%) rotate(${this._textColor === '#dc2626' ? '3' : '-3'}deg);
+                    background: repeating-linear-gradient(
+                        45deg,
+                        transparent,
+                        transparent 10px,
+                        rgba(0,0,0,0.03) 10px,
+                        rgba(0,0,0,0.03) 20px
+                    );
+                    pointer-events: none;
                 }
             `,
             action: `
                 button {
-                    background-color: #007bff;
-                    color: white;
-                    border-color: #0056b3;
-                    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+                    background: #10b981;
+                    color: #000;
+                    border-color: #000;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    font-weight: 900;
+                    position: relative;
+                    overflow: hidden;
+                }
+                button::before {
+                    content: '→';
+                    position: absolute;
+                    right: 20px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 28px;
+                    transition: all 0.2s ease;
+                }
+                button:hover:not(:disabled)::before {
+                    right: 10px;
+                    font-size: 32px;
                 }
                 button:hover:not(:disabled) {
-                    background-color: #0056b3;
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+                    background: #34d399;
+                    transform: translate(-3px, -3px) rotate(1deg);
+                    box-shadow: 11px 11px 0px #000;
                 }
                 button:disabled {
-                    background-color: #e9ecef;
-                    color: #6c757d;
-                    border-color: #dee2e6;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    background: #e7e5e4;
+                    color: #78716c;
+                    border-color: #78716c;
+                    box-shadow: 4px 4px 0px #78716c;
+                }
+                button:disabled::before {
+                    display: none;
                 }
             `
         };

@@ -1,6 +1,9 @@
 /*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
 
 /* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+
+/* Import Neo-Brutalist styles */
+@import url('./neo-brutalist.css');
 /*
  * What follows is the result of much research on cross-browser styling.
  * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
@@ -129,7 +132,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--font-weight-normal);
-  padding: var(--space-6);
+  padding: var(--space-8);
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
@@ -137,34 +140,52 @@ body {
   -ms-user-select: none;
   /* Prevent pinch zoom */
   touch-action: pan-x pan-y;
+  /* Neo-Brutalist grid background */
+  background-image: 
+    repeating-linear-gradient(0deg, 
+      transparent, 
+      transparent 40px, 
+      var(--color-stone-200) 40px, 
+      var(--color-stone-200) 41px),
+    repeating-linear-gradient(90deg, 
+      transparent, 
+      transparent 40px, 
+      var(--color-stone-200) 40px, 
+      var(--color-stone-200) 41px);
+  background-size: 41px 41px;
 }
 
 .game-card {
   background: var(--color-bg-secondary);
-  border-radius: var(--rounded-2xl);
-  box-shadow: var(--shadow-xl);
+  border: var(--border-brutal-thick);
+  border-radius: var(--rounded-none);
+  box-shadow: var(--shadow-brutal-xl);
   padding: var(--game-card-padding);
   text-align: center;
   max-width: var(--game-card-width);
   width: 100%;
   position: relative;
   z-index: var(--z-index-dropdown);
+  transform: rotate(-0.5deg);
 }
 
 #game-title {
   position: fixed;
-  top: var(--space-6);
+  top: var(--space-8);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(-2deg);
   margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-xl);
+  color: var(--color-stone-950);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
   z-index: var(--z-index-sticky);
-  background: var(--color-bg-glass);
-  padding: var(--space-3) var(--space-6);
-  border-radius: var(--rounded-xl);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10px);
+  background: var(--color-brutal-yellow);
+  padding: var(--space-4) var(--space-10);
+  border: var(--border-brutal-thick);
+  border-radius: var(--rounded-none);
+  box-shadow: var(--shadow-brutal-lg);
 }
 
 #game-container {
@@ -177,15 +198,17 @@ body {
 .number-row {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
-  margin-bottom: var(--space-6);
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+  position: relative;
 }
 
 .action-buttons {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
   width: 100%;
+  position: relative;
 }
 
 @media (min-width: 480px) {
@@ -205,14 +228,15 @@ body {
 }
 
 #number-line {
-  border: var(--border-width-2) solid var(--color-primary);
-  border-radius: var(--rounded-lg);
+  border: var(--border-brutal-thick);
+  border-radius: var(--rounded-none);
   background: var(--color-bg-secondary);
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-brutal-lg);
   max-width: 90%;
   height: auto;
   position: relative;
   z-index: var(--z-index-dropdown);
+  transform: rotate(0.5deg);
 }
 
 .pulse-overlay {
@@ -223,46 +247,47 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: var(--z-index-notification);
-  border-radius: var(--rounded-2xl);
+  border-radius: var(--rounded-none);
+  mix-blend-mode: multiply;
 }
 
 .pulse-red {
-  background: radial-gradient(circle, hsla(var(--color-error-h), var(--color-error-s), var(--color-error-l), 0.3) 0%, transparent 70%);
-  animation: pulse-red-animation var(--animation-duration-base) ease-out;
+  background: var(--color-brutal-pink);
+  animation: brutal-flash-red var(--animation-duration-base) ease-out;
 }
 
 .pulse-green {
-  background: radial-gradient(circle, hsla(var(--color-success-h), var(--color-success-s), var(--color-success-l), 0.3) 0%, transparent 70%);
-  animation: pulse-green-animation var(--animation-duration-base) ease-out;
+  background: var(--color-brutal-green);
+  animation: brutal-flash-green var(--animation-duration-base) ease-out;
 }
 
-@keyframes pulse-red-animation {
+@keyframes brutal-flash-red {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.1);
+    opacity: 0.3;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
   100% {
     opacity: 0;
-    transform: scale(1);
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
   }
 }
 
-@keyframes pulse-green-animation {
+@keyframes brutal-flash-green {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.1);
+    opacity: 0.3;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
   100% {
     opacity: 0;
-    transform: scale(1);
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
   }
 }
 
@@ -297,32 +322,41 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
-  color: var(--color-text-inverse);
-  padding: var(--space-4) var(--space-10);
-  border-radius: var(--rounded-xl);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  box-shadow: var(--shadow-error);
+  transform: translate(-50%, -50%) rotate(-3deg);
+  background: var(--color-brutal-pink);
+  color: var(--color-stone-950);
+  padding: var(--space-6) var(--space-10);
+  border-radius: var(--rounded-none);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-brutal-xl);
   z-index: var(--z-index-tooltip);
-  border: var(--border-width-thick) solid var(--color-stone-50);
-  animation: tooltip-bounce var(--animation-duration-base) ease-out;
+  border: var(--border-brutal-thick);
+  animation: brutal-shake var(--animation-duration-base) ease-out;
   text-align: center;
-  max-width: 300px;
+  max-width: 400px;
 }
 
-@keyframes tooltip-bounce {
+@keyframes brutal-shake {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.5);
   }
-  70% {
-    transform: translate(-50%, -50%) scale(1.05);
+  25% {
+    transform: translate(-50%, -50%) rotate(-5deg) scale(1.1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(5deg) scale(1.15);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(-3deg) scale(1.05);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) rotate(-3deg) scale(1);
   }
 }
 

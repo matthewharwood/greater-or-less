@@ -243,7 +243,45 @@ export class CelebrationScene extends HTMLElement {
                     width: 100%;
                     height: 100%;
                     position: relative;
-                    background: linear-gradient(to bottom, #000428, #004e92);
+                    background: repeating-linear-gradient(
+                        45deg,
+                        #fbbf24,
+                        #fbbf24 20px,
+                        #fb7185 20px,
+                        #fb7185 40px,
+                        #10b981 40px,
+                        #10b981 60px,
+                        #818cf8 60px,
+                        #818cf8 80px
+                    );
+                    animation: brutal-bg-slide 2s linear infinite;
+                }
+                
+                @keyframes brutal-bg-slide {
+                    from { background-position: 0 0; }
+                    to { background-position: 113px 113px; }
+                }
+                
+                .celebration-container::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: repeating-conic-gradient(
+                        from 0deg at 50% 50%,
+                        transparent 0deg,
+                        transparent 20deg,
+                        rgba(0,0,0,0.1) 20deg,
+                        rgba(0,0,0,0.1) 40deg
+                    );
+                    animation: brutal-spin 10s linear infinite;
+                }
+                
+                @keyframes brutal-spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
                 }
                 
                 #fireworks-canvas {
@@ -258,105 +296,221 @@ export class CelebrationScene extends HTMLElement {
                     position: absolute;
                     top: 50%;
                     left: 50%;
-                    transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%) rotate(-3deg);
                     text-align: center;
                     z-index: 10;
-                    animation: message-entrance 1s ease-out;
+                    background: #fff;
+                    border: 10px solid #000;
+                    padding: 40px;
+                    box-shadow: 
+                        15px 15px 0px #fb7185,
+                        30px 30px 0px #fbbf24,
+                        45px 45px 0px #10b981;
+                    animation: brutal-entrance 0.5s ease-out, brutal-shake 0.3s ease-out 0.5s;
+                }
+                
+                @keyframes brutal-entrance {
+                    from {
+                        opacity: 0;
+                        transform: translate(-50%, -50%) rotate(-3deg) scale(0);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translate(-50%, -50%) rotate(-3deg) scale(1);
+                    }
+                }
+                
+                @keyframes brutal-shake {
+                    0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
+                    25% { transform: translate(-52%, -48%) rotate(-6deg); }
+                    50% { transform: translate(-48%, -52%) rotate(3deg); }
+                    75% { transform: translate(-52%, -52%) rotate(-1deg); }
                 }
                 
                 .main-message {
-                    font-size: 72px;
-                    font-weight: bold;
-                    color: #ffffff;
-                    text-shadow: 
-                        3px 3px 0 #ff00ff,
-                        -3px -3px 0 #00ffff,
-                        3px -3px 0 #ffff00,
-                        -3px 3px 0 #00ff00,
-                        0 0 30px rgba(255, 255, 255, 0.8);
-                    margin-bottom: 20px;
-                    animation: rainbow-text 2s linear infinite, bounce 1s ease-in-out infinite;
+                    font-size: 96px;
+                    font-weight: 900;
+                    color: #000;
+                    text-transform: uppercase;
+                    letter-spacing: -0.05em;
+                    font-family: 'Roboto', sans-serif;
+                    background: linear-gradient(45deg, #fb7185, #fbbf24, #10b981, #818cf8);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    text-shadow: none;
+                    position: relative;
+                    margin-bottom: 30px;
+                    animation: brutal-text-pulse 0.5s ease-in-out infinite alternate;
+                }
+                
+                .main-message::before {
+                    content: attr(data-text);
+                    position: absolute;
+                    left: 8px;
+                    top: 8px;
+                    z-index: -1;
+                    color: #000;
+                    -webkit-text-fill-color: #000;
+                }
+                
+                @keyframes brutal-text-pulse {
+                    from { transform: scale(1) rotate(-1deg); }
+                    to { transform: scale(1.05) rotate(1deg); }
                 }
                 
                 .sub-message {
-                    font-size: 36px;
-                    color: #ffffff;
-                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                    font-size: 32px;
+                    font-weight: 700;
+                    color: #000;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    background: #fbbf24;
+                    padding: 10px 20px;
+                    border: 5px solid #000;
+                    display: inline-block;
+                    transform: rotate(2deg);
                     margin-bottom: 20px;
-                    animation: glow 2s ease-in-out infinite;
+                    box-shadow: 5px 5px 0px #000;
                 }
                 
                 .player-name {
-                    font-size: 56px;
-                    font-weight: bold;
-                    color: #ffd700;
-                    text-shadow: 
-                        2px 2px 0 #ff6b6b,
-                        4px 4px 10px rgba(255, 215, 0, 0.5);
-                    animation: name-pulse 1.5s ease-in-out infinite;
+                    font-size: 72px;
+                    font-weight: 900;
+                    color: #000;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    background: #10b981;
+                    padding: 15px 30px;
+                    border: 6px solid #000;
+                    display: inline-block;
+                    transform: rotate(-2deg);
+                    box-shadow: 8px 8px 0px #000;
+                    position: relative;
+                    animation: brutal-name-bounce 0.8s ease-in-out infinite;
+                }
+                
+                .player-name::after {
+                    content: '!!!';
+                    position: absolute;
+                    right: -40px;
+                    top: -20px;
+                    font-size: 48px;
+                    color: #000;
+                    background: #fb7185;
+                    padding: 5px 10px;
+                    border: 4px solid #000;
+                    transform: rotate(15deg);
+                    box-shadow: 4px 4px 0px #000;
+                }
+                
+                @keyframes brutal-name-bounce {
+                    0%, 100% { transform: rotate(-2deg) translateY(0); }
+                    50% { transform: rotate(-2deg) translateY(-10px); }
                 }
                 
                 .achievement-badge {
                     display: inline-block;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 20px 40px;
-                    border-radius: 50px;
-                    font-size: 28px;
-                    font-weight: bold;
+                    background: repeating-linear-gradient(
+                        -45deg,
+                        #818cf8,
+                        #818cf8 10px,
+                        #fbbf24 10px,
+                        #fbbf24 20px
+                    );
+                    color: #000;
+                    padding: 25px 40px;
+                    border: 8px solid #000;
+                    border-radius: 0;
+                    font-size: 32px;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
                     margin-top: 30px;
-                    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-                    animation: badge-float 3s ease-in-out infinite;
+                    box-shadow: 
+                        10px 10px 0px #000,
+                        10px 10px 0px 5px #fb7185;
+                    animation: brutal-badge-rotate 2s ease-in-out infinite;
+                    transform: rotate(5deg);
+                }
+                
+                @keyframes brutal-badge-rotate {
+                    0%, 100% { transform: rotate(5deg) scale(1); }
+                    25% { transform: rotate(-5deg) scale(1.05); }
+                    50% { transform: rotate(5deg) scale(1.1); }
+                    75% { transform: rotate(-3deg) scale(1.05); }
                 }
                 
                 .stars {
-                    font-size: 48px;
-                    animation: star-spin 2s linear infinite;
+                    font-size: 64px;
+                    position: relative;
+                    display: inline-block;
+                    animation: brutal-stars 0.5s ease-in-out infinite alternate;
                 }
                 
-                @keyframes message-entrance {
-                    from {
-                        opacity: 0;
-                        transform: translate(-50%, -50%) scale(0.5);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translate(-50%, -50%) scale(1);
-                    }
+                .stars::before {
+                    content: '★ ★ ★ ★ ★';
+                    position: absolute;
+                    left: 5px;
+                    top: 5px;
+                    color: #000;
+                    z-index: -1;
                 }
                 
-                @keyframes rainbow-text {
-                    0%, 100% { color: #ff0000; }
-                    16% { color: #ff8800; }
-                    33% { color: #ffff00; }
-                    50% { color: #00ff00; }
-                    66% { color: #0088ff; }
-                    83% { color: #ff00ff; }
+                @keyframes brutal-stars {
+                    from { transform: scale(1) rotate(-5deg); }
+                    to { transform: scale(1.1) rotate(5deg); }
                 }
                 
-                @keyframes bounce {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-20px); }
+                /* Brutal geometric shapes */
+                .brutal-shape {
+                    position: absolute;
+                    background: #fb7185;
+                    border: 6px solid #000;
+                    animation: brutal-float 3s ease-in-out infinite;
                 }
                 
-                @keyframes glow {
-                    0%, 100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.5); }
-                    50% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.8); }
+                .brutal-shape-1 {
+                    width: 100px;
+                    height: 100px;
+                    top: 10%;
+                    left: 10%;
+                    transform: rotate(45deg);
+                    animation-delay: 0s;
                 }
                 
-                @keyframes name-pulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.1); }
+                .brutal-shape-2 {
+                    width: 80px;
+                    height: 80px;
+                    top: 20%;
+                    right: 15%;
+                    background: #fbbf24;
+                    animation-delay: 0.5s;
                 }
                 
-                @keyframes badge-float {
-                    0%, 100% { transform: translateY(0) rotate(-2deg); }
-                    50% { transform: translateY(-10px) rotate(2deg); }
+                .brutal-shape-3 {
+                    width: 120px;
+                    height: 120px;
+                    bottom: 15%;
+                    left: 20%;
+                    background: #10b981;
+                    transform: rotate(30deg);
+                    animation-delay: 1s;
                 }
                 
-                @keyframes star-spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
+                .brutal-shape-4 {
+                    width: 90px;
+                    height: 90px;
+                    bottom: 20%;
+                    right: 10%;
+                    background: #818cf8;
+                    transform: rotate(60deg);
+                    animation-delay: 1.5s;
+                }
+                
+                @keyframes brutal-float {
+                    0%, 100% { transform: translateY(0) rotate(45deg); }
+                    50% { transform: translateY(-30px) rotate(50deg); }
                 }
                 
                 @media (max-width: 768px) {
@@ -370,15 +524,19 @@ export class CelebrationScene extends HTMLElement {
             
             <div class="celebration-container">
                 <canvas id="fireworks-canvas"></canvas>
+                <div class="brutal-shape brutal-shape-1"></div>
+                <div class="brutal-shape brutal-shape-2"></div>
+                <div class="brutal-shape brutal-shape-3"></div>
+                <div class="brutal-shape brutal-shape-4"></div>
                 <div class="message-container">
-                    <div class="stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
-                    <div class="main-message">INCREDIBLE!</div>
-                    <div class="sub-message">You did an amazing job,</div>
-                    <div class="player-name">${this._playerName}!</div>
+                    <div class="stars">★ ★ ★ ★ ★</div>
+                    <div class="main-message" data-text="INCREDIBLE!">INCREDIBLE!</div>
+                    <div class="sub-message">YOU CRUSHED IT</div>
+                    <div class="player-name">${this._playerName}</div>
                     <div class="achievement-badge">
-                        🏆 10 IN A ROW CHAMPION! 🏆
+                        🏆 10 STREAK LEGEND 🏆
                     </div>
-                    <div class="stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
+                    <div class="stars">★ ★ ★ ★ ★</div>
                 </div>
             </div>
         `;

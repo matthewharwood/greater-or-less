@@ -8,7 +8,9 @@
       "Bash(rename:*)",
       "Bash(start test-versions.html)",
       "Bash(start index.html)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:goshippo.com)",
+      "WebFetch(domain:www.stash.gg)"
     ],
     "deny": [],
     "ask": []

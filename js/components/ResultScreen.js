@@ -202,56 +202,84 @@ export class ResultScreen extends HTMLElement {
                 ${this.getCommonStyles()}
                 
                 h2 {
-                    color: green;
+                    color: #000;
+                    font-size: 36px;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    font-family: 'Roboto', sans-serif;
                     position: relative;
                     z-index: 20;
-                    margin: 20px 0;
+                    margin: 30px auto;
+                    padding: 20px 40px;
+                    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+                    border: 6px solid #000;
+                    box-shadow: 10px 10px 0px #000;
+                    transform: rotate(-3deg);
+                    display: inline-block;
+                }
+                
+                h2::after {
+                    content: '';
+                    position: absolute;
+                    top: -10px;
+                    left: -10px;
+                    right: -10px;
+                    bottom: -10px;
+                    background: #fbbf24;
+                    z-index: -1;
+                    transform: rotate(2deg);
                 }
                 
                 #countdown {
                     position: relative;
                     z-index: 20;
-                    font-size: 48px;
-                    font-weight: bold;
-                    color: #27ae60;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-                    margin: 20px auto;
-                    background: linear-gradient(135deg, #a8e6cf, #7fcdcd);
-                    border: 4px solid #27ae60;
-                    border-radius: 50%;
-                    width: 80px;
-                    height: 80px;
+                    font-size: 72px;
+                    font-weight: 900;
+                    color: #000;
+                    font-family: 'Roboto Mono', monospace;
+                    margin: 30px auto;
+                    background: #fbbf24;
+                    border: 6px solid #000;
+                    border-radius: 0;
+                    width: 120px;
+                    height: 120px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 8px 16px rgba(39, 174, 96, 0.4), inset 0 4px 8px rgba(255,255,255,0.3);
-                    animation: countdown-bounce 1s infinite;
+                    box-shadow: 8px 8px 0px #000;
+                    animation: brutal-countdown-bounce 1s infinite;
+                    transform: rotate(-5deg);
                 }
                 
-                @keyframes countdown-bounce {
-                    0%, 20%, 50%, 80%, 100% {
-                        transform: translateY(0) scale(1);
+                @keyframes brutal-countdown-bounce {
+                    0%, 100% {
+                        transform: rotate(-5deg) translateY(0);
+                        box-shadow: 8px 8px 0px #000;
                     }
-                    40% {
-                        transform: translateY(-10px) scale(1.1);
-                    }
-                    60% {
-                        transform: translateY(-5px) scale(1.05);
-                    }
-                }
-                
-                @keyframes countdown-pulse {
-                    0% {
-                        transform: scale(1);
-                        box-shadow: 0 8px 16px rgba(39, 174, 96, 0.4), inset 0 4px 8px rgba(255,255,255,0.3);
+                    25% {
+                        transform: rotate(-8deg) translateY(-15px);
+                        box-shadow: 12px 12px 0px #000;
                     }
                     50% {
-                        transform: scale(1.15);
-                        box-shadow: 0 12px 24px rgba(39, 174, 96, 0.6), inset 0 6px 12px rgba(255,255,255,0.4);
+                        transform: rotate(5deg) translateY(-10px);
+                        box-shadow: 10px 10px 0px #000;
                     }
-                    100% {
-                        transform: scale(1);
-                        box-shadow: 0 8px 16px rgba(39, 174, 96, 0.4), inset 0 4px 8px rgba(255,255,255,0.3);
+                    75% {
+                        transform: rotate(3deg) translateY(-5px);
+                        box-shadow: 9px 9px 0px #000;
+                    }
+                }
+                
+                @keyframes brutal-pulse {
+                    0%, 100% {
+                        transform: rotate(-5deg) scale(1);
+                        box-shadow: 8px 8px 0px #000;
+                    }
+                    50% {
+                        transform: rotate(-5deg) scale(1.2);
+                        box-shadow: 12px 12px 0px #000;
+                        background: #fde68a;
                     }
                 }
             </style>
@@ -266,72 +294,161 @@ export class ResultScreen extends HTMLElement {
                 ${this.getCommonStyles()}
                 
                 h2 {
-                    color: red;
-                    margin: 20px 0;
+                    color: #000;
+                    font-size: 36px;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    font-family: 'Roboto', sans-serif;
+                    margin: 30px auto;
+                    padding: 20px 40px;
+                    background: #fb7185;
+                    border: 6px solid #000;
+                    box-shadow: 10px 10px 0px #000;
+                    transform: rotate(3deg);
+                    display: inline-block;
+                    position: relative;
+                }
+                
+                h2::after {
+                    content: '';
+                    position: absolute;
+                    top: -10px;
+                    left: -10px;
+                    right: -10px;
+                    bottom: -10px;
+                    background: repeating-linear-gradient(
+                        -45deg,
+                        #fbbf24,
+                        #fbbf24 10px,
+                        transparent 10px,
+                        transparent 20px
+                    );
+                    z-index: -1;
+                    opacity: 0.5;
                 }
                 
                 .explanation-well {
-                    background: linear-gradient(135deg, #ffe6e6, #ffcccc);
-                    border: 3px solid #ff9999;
-                    border-radius: 20px;
-                    padding: 25px;
-                    margin: 20px 0;
-                    box-shadow: 0 8px 16px rgba(255, 102, 102, 0.2);
+                    background: #fef3c7;
+                    border: 6px solid #000;
+                    border-radius: 0;
+                    padding: 30px;
+                    margin: 30px auto;
+                    box-shadow: 8px 8px 0px #000;
                     position: relative;
-                    overflow: hidden;
+                    overflow: visible;
+                    transform: rotate(-1deg);
+                    max-width: 500px;
                 }
                 
-                .explanation-icon {
+                .explanation-well::before {
+                    content: '!';
                     position: absolute;
-                    top: -10px;
-                    right: -10px;
-                    font-size: 40px;
-                    opacity: 0.3;
+                    top: -20px;
+                    right: -20px;
+                    font-size: 80px;
+                    font-weight: 900;
+                    color: #000;
+                    background: #fbbf24;
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 5px solid #000;
+                    box-shadow: 4px 4px 0px #000;
                     transform: rotate(15deg);
                 }
                 
+                .explanation-icon {
+                    display: none;
+                }
+                
                 .number-explanation {
-                    font-size: 24px;
-                    margin: 15px 0;
-                    color: #1a5490;
-                    text-shadow: 1px 1px 0px white, -1px -1px 0px white, 1px -1px 0px white, -1px 1px 0px white;
+                    font-size: 28px;
+                    margin: 20px 0;
+                    color: #000;
+                    font-weight: 700;
+                    font-family: 'Roboto', sans-serif;
+                    text-transform: uppercase;
+                    letter-spacing: 0.02em;
                 }
                 
                 .statement-result {
-                    font-size: 18px;
-                    color: #2c3e50;
-                    text-shadow: 1px 1px 0px white, -1px -1px 0px white, 1px -1px 0px white, -1px 1px 0px white;
+                    font-size: 20px;
+                    color: #000;
+                    font-weight: 600;
+                    font-family: 'Roboto Mono', monospace;
+                    background: #fff;
+                    padding: 15px;
+                    border: 4px solid #000;
+                    margin-top: 20px;
+                    box-shadow: 4px 4px 0px #000;
                 }
                 
                 .highlight-red {
-                    color: #c0392b;
-                    font-weight: bold;
-                    text-shadow: 1px 1px 0px white, -1px -1px 0px white, 1px -1px 0px white, -1px 1px 0px white;
+                    background: #fb7185;
+                    color: #000;
+                    padding: 2px 8px;
+                    font-weight: 900;
+                    border: 3px solid #000;
+                    display: inline-block;
+                    transform: rotate(-2deg);
+                    box-shadow: 2px 2px 0px #000;
                 }
                 
                 .highlight-green {
-                    color: #1e8449;
-                    font-weight: bold;
-                    text-shadow: 1px 1px 0px white, -1px -1px 0px white, 1px -1px 0px white, -1px 1px 0px white;
+                    background: #10b981;
+                    color: #000;
+                    padding: 2px 8px;
+                    font-weight: 900;
+                    border: 3px solid #000;
+                    display: inline-block;
+                    transform: rotate(2deg);
+                    box-shadow: 2px 2px 0px #000;
                 }
                 
                 .highlight-yellow {
-                    color: #b7950b;
-                    font-weight: bold;
-                    text-shadow: 1px 1px 0px white, -1px -1px 0px white, 1px -1px 0px white, -1px 1px 0px white;
+                    background: #fbbf24;
+                    color: #000;
+                    padding: 2px 8px;
+                    font-weight: 900;
+                    border: 3px solid #000;
+                    display: inline-block;
+                    transform: rotate(-1deg);
+                    box-shadow: 2px 2px 0px #000;
                 }
                 
                 .encouragement {
-                    font-size: 18px;
-                    color: #666;
-                    margin: 20px 0;
+                    font-size: 20px;
+                    color: #000;
+                    margin: 30px auto;
+                    font-weight: 700;
+                    font-family: 'Roboto', sans-serif;
+                    background: linear-gradient(90deg, #fde68a 0%, #fbbf24 50%, #fde68a 100%);
+                    padding: 15px 25px;
+                    border: 4px solid #000;
+                    box-shadow: 6px 6px 0px #000;
+                    transform: rotate(1deg);
+                    display: inline-block;
+                    max-width: 400px;
                 }
                 
                 #countdown {
-                    font-size: 24px;
-                    color: #ff6b6b;
-                    font-weight: bold;
-                    margin: 20px 0;
+                    font-size: 48px;
+                    color: #000;
+                    font-weight: 900;
+                    font-family: 'Roboto Mono', monospace;
+                    margin: 30px auto;
+                    background: #fb7185;
+                    border: 5px solid #000;
+                    width: 100px;
+                    height: 100px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 6px 6px 0px #000;
+                    transform: rotate(5deg);
                 }
             </style>
             <h2>❌ WRONG! ❌</h2>
@@ -349,7 +466,31 @@ export class ResultScreen extends HTMLElement {
             :host {
                 display: block;
                 text-align: center;
-                padding: 20px;
+                padding: 30px;
+                position: relative;
+            }
+            
+            :host::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(0,0,0,0.02) 20px,
+                    rgba(0,0,0,0.02) 40px
+                );
+                pointer-events: none;
+                z-index: 1;
+            }
+            
+            * {
+                position: relative;
+                z-index: 2;
             }
         `;
     }

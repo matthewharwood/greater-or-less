@@ -1,0 +1,376 @@
+/**
+ * Neo-Brutalist Component Styles
+ * Bold, raw, and unapologetically digital aesthetic
+ */
+
+/* ============================================
+   BUTTONS - Neo-Brutalist Style
+   ============================================ */
+
+.btn-brutal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-bg-secondary);
+  color: var(--color-stone-950);
+  border: var(--border-brutal);
+  box-shadow: var(--shadow-brutal);
+  border-radius: var(--rounded-none);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  position: relative;
+  user-select: none;
+  min-height: var(--game-button-height);
+}
+
+.btn-brutal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-brutal-md);
+}
+
+.btn-brutal:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.btn-brutal-primary {
+  background: var(--color-brutal-yellow);
+  border-color: var(--color-stone-950);
+  color: var(--color-stone-950);
+}
+
+.btn-brutal-success {
+  background: var(--color-brutal-green);
+  border-color: var(--color-stone-950);
+  color: var(--color-stone-950);
+}
+
+.btn-brutal-error {
+  background: var(--color-brutal-pink);
+  border-color: var(--color-stone-950);
+  color: var(--color-stone-950);
+}
+
+.btn-brutal-warning {
+  background: var(--color-brutal-orange);
+  border-color: var(--color-stone-950);
+  color: var(--color-stone-950);
+}
+
+/* Equal button special styling */
+.btn-brutal-equal {
+  background: linear-gradient(135deg, var(--color-brutal-yellow) 0%, var(--color-brutal-orange) 100%);
+  border: var(--border-brutal-thick);
+  animation: brutal-pulse 2s ease-in-out infinite;
+}
+
+@keyframes brutal-pulse {
+  0%, 100% { 
+    box-shadow: var(--shadow-brutal-md);
+  }
+  50% { 
+    box-shadow: var(--shadow-brutal-lg);
+    transform: scale(1.02);
+  }
+}
+
+/* ============================================
+   CARDS - Neo-Brutalist Style
+   ============================================ */
+
+.card-brutal {
+  background: var(--color-bg-secondary);
+  border: var(--border-brutal);
+  box-shadow: var(--shadow-brutal-lg);
+  border-radius: var(--rounded-none);
+  padding: var(--space-10);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-brutal::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    var(--color-stone-950) 10px,
+    var(--color-stone-950) 11px
+  );
+  z-index: -1;
+  opacity: 0.05;
+}
+
+.card-brutal-accent {
+  border-left-width: var(--border-width-8);
+  border-left-color: var(--color-brutal-yellow);
+}
+
+/* ============================================
+   NUMBER DISPLAY - Neo-Brutalist Style
+   ============================================ */
+
+.number-brutal {
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-5xl);
+  background: var(--color-brutal-yellow);
+  color: var(--color-stone-950);
+  padding: var(--space-6) var(--space-10);
+  border: var(--border-brutal-thick);
+  box-shadow: var(--shadow-brutal-md);
+  border-radius: var(--rounded-none);
+  position: relative;
+  display: inline-block;
+  min-width: 120px;
+  text-align: center;
+  transform: rotate(-1deg);
+}
+
+.number-brutal.left {
+  background: var(--color-brutal-pink);
+  transform: rotate(-2deg);
+}
+
+.number-brutal.right {
+  background: var(--color-brutal-green);
+  transform: rotate(2deg);
+}
+
+.operator-brutal {
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-4xl);
+  color: var(--color-stone-950);
+  padding: 0 var(--space-6);
+  position: relative;
+  display: inline-block;
+  text-shadow: 3px 3px 0px var(--color-brutal-yellow);
+}
+
+/* ============================================
+   GAME CONTAINER - Neo-Brutalist Style
+   ============================================ */
+
+.game-container-brutal {
+  background: var(--color-bg-primary);
+  position: relative;
+  min-height: 100vh;
+  padding: var(--space-8);
+  overflow: hidden;
+}
+
+.game-container-brutal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(0deg, 
+      transparent, 
+      transparent 40px, 
+      var(--color-stone-200) 40px, 
+      var(--color-stone-200) 41px),
+    repeating-linear-gradient(90deg, 
+      transparent, 
+      transparent 40px, 
+      var(--color-stone-200) 40px, 
+      var(--color-stone-200) 41px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ============================================
+   TITLE - Neo-Brutalist Style
+   ============================================ */
+
+.title-brutal {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-4xl);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--color-stone-950);
+  background: var(--color-brutal-yellow);
+  padding: var(--space-4) var(--space-8);
+  border: var(--border-brutal-thick);
+  box-shadow: var(--shadow-brutal-lg);
+  display: inline-block;
+  transform: rotate(-2deg);
+  position: relative;
+}
+
+.title-brutal::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background: var(--color-brutal-pink);
+  z-index: -1;
+  transform: rotate(1deg);
+}
+
+/* ============================================
+   PROGRESS BAR - Neo-Brutalist Style
+   ============================================ */
+
+.progress-brutal {
+  background: var(--color-bg-secondary);
+  border: var(--border-brutal);
+  box-shadow: var(--shadow-brutal);
+  height: var(--space-12);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--rounded-none);
+}
+
+.progress-brutal-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-brutal-green),
+    var(--color-brutal-green) 10px,
+    var(--color-brutal-yellow) 10px,
+    var(--color-brutal-yellow) 20px
+  );
+  transition: width 0.3s ease;
+  border-right: var(--border-width-4) solid var(--color-stone-950);
+}
+
+/* ============================================
+   TOOLTIP - Neo-Brutalist Style
+   ============================================ */
+
+.tooltip-brutal {
+  position: fixed;
+  background: var(--color-brutal-pink);
+  color: var(--color-stone-950);
+  padding: var(--space-6) var(--space-8);
+  border: var(--border-brutal-thick);
+  box-shadow: var(--shadow-brutal-xl);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: var(--z-index-tooltip);
+  animation: brutal-shake 0.5s ease-out;
+  border-radius: var(--rounded-none);
+}
+
+@keyframes brutal-shake {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-5deg) scale(1.05); }
+  50% { transform: rotate(5deg) scale(1.1); }
+  75% { transform: rotate(-3deg) scale(1.05); }
+}
+
+/* ============================================
+   ANIMATIONS - Neo-Brutalist Style
+   ============================================ */
+
+.brutal-rotate {
+  animation: brutal-rotate 20s linear infinite;
+}
+
+@keyframes brutal-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.brutal-bounce {
+  animation: brutal-bounce 2s ease-in-out infinite;
+}
+
+@keyframes brutal-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ============================================
+   HOVER EFFECTS - Neo-Brutalist Style
+   ============================================ */
+
+.brutal-hover-lift:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-brutal-xl);
+}
+
+.brutal-hover-sink:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ============================================
+   CELEBRATION OVERLAY - Neo-Brutalist Style
+   ============================================ */
+
+.celebration-brutal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: var(--z-index-notification);
+  overflow: hidden;
+}
+
+.celebration-brutal::before,
+.celebration-brutal::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: repeating-conic-gradient(
+    var(--color-brutal-yellow) 0deg 20deg,
+    var(--color-brutal-pink) 20deg 40deg,
+    var(--color-brutal-green) 40deg 60deg,
+    var(--color-brutal-blue) 60deg 80deg,
+    var(--color-brutal-orange) 80deg 100deg
+  );
+  animation: brutal-spin 10s linear infinite;
+  opacity: 0.1;
+}
+
+@keyframes brutal-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .number-brutal {
+    font-size: var(--font-size-3xl);
+    padding: var(--space-4) var(--space-6);
+  }
+  
+  .title-brutal {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .btn-brutal {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-size-base);
+  }
+}

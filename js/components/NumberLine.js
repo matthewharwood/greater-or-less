@@ -45,24 +45,35 @@ export class NumberLine extends HTMLElement {
             <style>
                 :host {
                     display: block;
-                    margin-top: 20px;
+                    margin-top: 30px;
                     position: relative;
                     z-index: 10;
+                    transform: rotate(0.5deg);
                 }
                 
                 canvas {
-                    border: 2px solid #007bff;
-                    border-radius: 8px;
-                    background: white;
-                    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+                    border: 6px solid #000;
+                    border-radius: 0;
+                    background: linear-gradient(90deg, 
+                        #fef3c7 0%, 
+                        #fde68a 25%, 
+                        #fef3c7 50%, 
+                        #fde68a 75%, 
+                        #fef3c7 100%);
+                    box-shadow: 10px 10px 0px #000;
                     max-width: 100%;
                     height: auto;
                     display: block;
                     margin: 0 auto;
                     position: relative;
                 }
+                
+                canvas:hover {
+                    transform: translate(-2px, -2px);
+                    box-shadow: 12px 12px 0px #000;
+                }
             </style>
-            <canvas width="800" height="120"></canvas>
+            <canvas width="800" height="180"></canvas>
         `;
     }
 
@@ -78,38 +89,49 @@ export class NumberLine extends HTMLElement {
         const width = this._canvas.width;
         const height = this._canvas.height;
         
-        // Clear canvas
+        // Clear canvas with transparent background
         ctx.clearRect(0, 0, width, height);
         
-        // Draw main number line
+        // Draw main number line with brutal style
         const lineY = height / 2;
-        const padding = 40;
+        const padding = 60;
         const lineWidth = width - (padding * 2);
         
-        ctx.strokeStyle = '#007bff';
-        ctx.lineWidth = 3;
+        // Thick black main line
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 8;
+        ctx.lineCap = 'square';
         ctx.beginPath();
         ctx.moveTo(padding, lineY);
         ctx.lineTo(width - padding, lineY);
         ctx.stroke();
         
-        // Draw tick marks
-        ctx.lineWidth = 1;
+        // Draw bold tick marks
         for (let i = 0; i <= 10; i++) {
             const x = padding + (i * lineWidth / 10);
-            const tickHeight = i % 5 === 0 ? 15 : 8;
+            const tickHeight = i % 5 === 0 ? 25 : 12;
             
+            ctx.lineWidth = i % 5 === 0 ? 5 : 3;
             ctx.beginPath();
             ctx.moveTo(x, lineY - tickHeight);
             ctx.lineTo(x, lineY + tickHeight);
             ctx.stroke();
             
-            // Label major ticks
+            // Bold labels for major ticks
             if (i % 5 === 0) {
-                ctx.fillStyle = '#007bff';
-                ctx.font = '12px Arial';
+                // Background box for label
+                ctx.fillStyle = '#fbbf24';
+                ctx.fillRect(x - 25, lineY + 35, 50, 25);
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(x - 25, lineY + 35, 50, 25);
+                
+                // Label text
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 18px "Roboto Mono", monospace';
                 ctx.textAlign = 'center';
-                ctx.fillText((i * 100).toString(), x, lineY + 30);
+                ctx.textBaseline = 'middle';
+                ctx.fillText((i * 100).toString(), x, lineY + 47);
             }
         }
         
@@ -120,116 +142,211 @@ export class NumberLine extends HTMLElement {
         const leftPos = padding + (this._leftNumber / 1000) * lineWidth;
         const rightPos = padding + (this._rightNumber / 1000) * lineWidth;
         
-        // Draw dots for the numbers
-        ctx.fillStyle = '#e74c3c'; // Red for left
-        ctx.beginPath();
-        ctx.arc(leftPos, lineY, 8, 0, 2 * Math.PI);
-        ctx.fill();
+        // Draw brutal-style markers for the numbers
+        // Left number marker - Pink/Red
+        ctx.fillStyle = '#fb7185';
+        ctx.fillRect(leftPos - 15, lineY - 15, 30, 30);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(leftPos - 15, lineY - 15, 30, 30);
         
-        ctx.fillStyle = '#27ae60'; // Green for right
-        ctx.beginPath();
-        ctx.arc(rightPos, lineY, 8, 0, 2 * Math.PI);
-        ctx.fill();
+        // Add rotation effect
+        ctx.save();
+        ctx.translate(leftPos, lineY);
+        ctx.rotate(-Math.PI / 12);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(-5, -5, 10, 10);
+        ctx.restore();
         
-        // Draw connecting line
-        ctx.strokeStyle = this._leftNumber > this._rightNumber ? '#e74c3c' : '#27ae60';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([5, 5]);
+        // Right number marker - Green
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(rightPos - 15, lineY - 15, 30, 30);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(rightPos - 15, lineY - 15, 30, 30);
+        
+        // Add rotation effect
+        ctx.save();
+        ctx.translate(rightPos, lineY);
+        ctx.rotate(Math.PI / 12);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(-5, -5, 10, 10);
+        ctx.restore();
+        
+        // Draw bold connecting line with zigzag pattern
+        const winner = this._leftNumber > this._rightNumber;
+        ctx.strokeStyle = winner ? '#fb7185' : '#10b981';
+        ctx.lineWidth = 6;
+        
+        // Zigzag pattern
         ctx.beginPath();
-        ctx.moveTo(leftPos, lineY);
-        ctx.lineTo(rightPos, lineY);
+        const steps = 10;
+        const stepX = (rightPos - leftPos) / steps;
+        for (let i = 0; i <= steps; i++) {
+            const x = leftPos + (i * stepX);
+            const y = lineY + (i % 2 === 0 ? -8 : 8);
+            if (i === 0) {
+                ctx.moveTo(x, lineY);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
         ctx.stroke();
-        ctx.setLineDash([]);
         
-        // Label the numbers
-        ctx.fillStyle = '#e74c3c';
-        ctx.font = 'bold 14px Arial';
+        // Label the numbers with brutal style
+        // Left number label
+        ctx.save();
+        ctx.translate(leftPos, lineY - 35);
+        ctx.rotate(-Math.PI / 24);
+        
+        // Background box
+        ctx.fillStyle = '#fecdd3';
+        ctx.fillRect(-30, -15, 60, 30);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-30, -15, 60, 30);
+        
+        // Text
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 22px "Roboto", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(this._leftNumber.toString(), leftPos, lineY - 20);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this._leftNumber.toString(), 0, 0);
+        ctx.restore();
         
-        ctx.fillStyle = '#27ae60';
-        ctx.fillText(this._rightNumber.toString(), rightPos, lineY - 20);
+        // Right number label
+        ctx.save();
+        ctx.translate(rightPos, lineY - 35);
+        ctx.rotate(Math.PI / 24);
+        
+        // Background box
+        ctx.fillStyle = '#a7f3d0';
+        ctx.fillRect(-30, -15, 60, 30);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-30, -15, 60, 30);
+        
+        // Text
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 22px "Roboto", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this._rightNumber.toString(), 0, 0);
+        ctx.restore();
         
         // Draw arrows from above
         this.drawArrows(ctx, leftPos, rightPos, lineY);
     }
 
     drawDirectionalLabels(ctx, padding, lineWidth, lineY, width) {
-        ctx.fillStyle = '#666666';
-        ctx.font = 'bold 14px Arial';
+        // SMALLER label with brutal style
+        ctx.save();
+        ctx.translate(padding + (lineWidth * 0.15), lineY + 60);
+        ctx.rotate(-Math.PI / 36);
+        
+        // Background
+        ctx.fillStyle = '#fb7185';
+        ctx.fillRect(-50, -20, 100, 40);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-50, -20, 100, 40);
+        
+        // Text
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 20px "Roboto", sans-serif';
         ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('SMALLER', 0, 0);
+        ctx.restore();
         
-        // SMALLER on left
-        ctx.fillText('SMALLER', padding + (lineWidth * 0.15), lineY + 50);
-        
-        // Left arrow
-        ctx.strokeStyle = '#666666';
-        ctx.lineWidth = 2;
+        // Left arrow with brutal style
+        ctx.fillStyle = '#000';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.moveTo(padding + 20, lineY + 55);
-        ctx.lineTo(padding + 5, lineY + 55);
+        ctx.moveTo(padding + 30, lineY + 65);
+        ctx.lineTo(padding, lineY + 65);
         ctx.stroke();
         
-        // Left arrow head
+        // Arrow head as triangle
         ctx.beginPath();
-        ctx.moveTo(padding + 5, lineY + 55);
-        ctx.lineTo(padding + 12, lineY + 50);
-        ctx.lineTo(padding + 12, lineY + 60);
+        ctx.moveTo(padding, lineY + 65);
+        ctx.lineTo(padding + 15, lineY + 55);
+        ctx.lineTo(padding + 15, lineY + 75);
         ctx.closePath();
         ctx.fill();
         
-        // BIGGER on right
-        ctx.fillText('BIGGER', width - padding - (lineWidth * 0.15), lineY + 50);
+        // BIGGER label with brutal style
+        ctx.save();
+        ctx.translate(width - padding - (lineWidth * 0.15), lineY + 60);
+        ctx.rotate(Math.PI / 36);
         
-        // Right arrow
+        // Background
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(-45, -20, 90, 40);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-45, -20, 90, 40);
+        
+        // Text
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 20px "Roboto", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('BIGGER', 0, 0);
+        ctx.restore();
+        
+        // Right arrow with brutal style
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.moveTo(width - padding - 20, lineY + 55);
-        ctx.lineTo(width - padding - 5, lineY + 55);
+        ctx.moveTo(width - padding - 30, lineY + 65);
+        ctx.lineTo(width - padding, lineY + 65);
         ctx.stroke();
         
-        // Right arrow head
+        // Arrow head as triangle
+        ctx.fillStyle = '#000';
         ctx.beginPath();
-        ctx.moveTo(width - padding - 5, lineY + 55);
-        ctx.lineTo(width - padding - 12, lineY + 50);
-        ctx.lineTo(width - padding - 12, lineY + 60);
+        ctx.moveTo(width - padding, lineY + 65);
+        ctx.lineTo(width - padding - 15, lineY + 55);
+        ctx.lineTo(width - padding - 15, lineY + 75);
         ctx.closePath();
         ctx.fill();
     }
 
     drawArrows(ctx, leftPos, rightPos, lineY) {
-        ctx.strokeStyle = '#007bff';
-        ctx.lineWidth = 2;
+        // Skip curved arrows for cleaner brutal aesthetic
+        // Add bold pointing hands instead
         
-        // Left arrow curve
-        ctx.beginPath();
-        ctx.moveTo(leftPos - 50, 10);
-        ctx.quadraticCurveTo(leftPos - 25, lineY - 40, leftPos, lineY - 15);
-        ctx.stroke();
+        // Left pointing hand
+        ctx.save();
+        ctx.translate(leftPos - 60, 20);
+        ctx.rotate(Math.PI / 6);
         
-        // Right arrow curve
-        ctx.beginPath();
-        ctx.moveTo(rightPos + 50, 10);
-        ctx.quadraticCurveTo(rightPos + 25, lineY - 40, rightPos, lineY - 15);
-        ctx.stroke();
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('👇', 0, 0);
         
-        // Arrow heads
-        ctx.fillStyle = '#007bff';
+        // Add shadow
+        ctx.fillStyle = '#000';
+        ctx.fillText('👇', 2, 2);
+        ctx.restore();
         
-        // Left arrow head
-        ctx.beginPath();
-        ctx.moveTo(leftPos, lineY - 15);
-        ctx.lineTo(leftPos - 5, lineY - 25);
-        ctx.lineTo(leftPos + 5, lineY - 25);
-        ctx.closePath();
-        ctx.fill();
+        // Right pointing hand
+        ctx.save();
+        ctx.translate(rightPos + 60, 20);
+        ctx.rotate(-Math.PI / 6);
         
-        // Right arrow head
-        ctx.beginPath();
-        ctx.moveTo(rightPos, lineY - 15);
-        ctx.lineTo(rightPos - 5, lineY - 25);
-        ctx.lineTo(rightPos + 5, lineY - 25);
-        ctx.closePath();
-        ctx.fill();
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('👇', 0, 0);
+        
+        // Add shadow
+        ctx.fillStyle = '#000';
+        ctx.fillText('👇', 2, 2);
+        ctx.restore();
     }
 }
 

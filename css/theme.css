@@ -73,25 +73,35 @@
   --color-stone-900: oklch(0.197 0.004 38.756);
   --color-stone-950: oklch(0.129 0.004 19.287);
   
+  /* Neo-Brutalist Color Palette */
+  --color-brutal-yellow: oklch(0.905 0.155 96.5);
+  --color-brutal-pink: oklch(0.776 0.142 357.4);
+  --color-brutal-purple: oklch(0.553 0.237 303.4);
+  --color-brutal-blue: oklch(0.586 0.251 250.5);
+  --color-brutal-green: oklch(0.647 0.161 142.5);
+  --color-brutal-orange: oklch(0.716 0.172 66.5);
+  --color-brutal-red: oklch(0.566 0.195 25.5);
+  
   /* Semantic Color Mappings */
   --color-primary: var(--color-indigo-600);
   --color-primary-light: var(--color-indigo-400);
-  --color-primary-dark: var(--color-indigo-700);
-  --color-success: var(--color-emerald-600);
+  --color-primary-dark: var(--color-indigo-800);
+  --color-success: var(--color-emerald-500);
   --color-success-light: var(--color-emerald-400);
   --color-success-dark: var(--color-emerald-700);
-  --color-error: var(--color-rose-600);
+  --color-error: var(--color-rose-500);
   --color-error-light: var(--color-rose-400);
   --color-error-dark: var(--color-rose-700);
-  --color-warning: var(--color-amber-500);
-  --color-warning-light: var(--color-amber-400);
+  --color-warning: var(--color-amber-400);
+  --color-warning-light: var(--color-amber-300);
   --color-warning-dark: var(--color-amber-600);
   
-  /* Background Colors */
-  --color-bg-primary: var(--color-stone-100);
-  --color-bg-secondary: var(--color-stone-50);
-  --color-bg-overlay: oklch(0.129 0.004 19.287 / 0.5);
-  --color-bg-glass: oklch(0.985 0.002 56.373 / 0.95);
+  /* Background Colors - High contrast */
+  --color-bg-primary: var(--color-stone-50);
+  --color-bg-secondary: oklch(1 0 0);
+  --color-bg-accent: var(--color-brutal-yellow);
+  --color-bg-overlay: oklch(0.129 0.004 19.287 / 0.9);
+  --color-bg-glass: oklch(1 0 0 / 0.98);
   
   /* Text Colors */
   --color-text-primary: var(--color-stone-900);
@@ -138,13 +148,13 @@
   --font-size-4xl: 3.815rem;   /* 61px */
   --font-size-5xl: 4.768rem;   /* 76.3px */
   
-  /* Font Weights */
-  --font-weight-light: 300;      /* For Roboto Mono Light */
-  --font-weight-normal: 400;     /* For Source Sans Pro Regular */
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;   /* For Source Sans Pro Semibold */
-  --font-weight-bold: 700;
-  --font-weight-black: 900;      /* For Roboto Black */
+  /* Font Weights - Neo-Brutalist (heavier weights) */
+  --font-weight-light: 400;      
+  --font-weight-normal: 500;     
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;   
+  --font-weight-bold: 800;
+  --font-weight-black: 900;      /* Maximum impact */
   
   /* Line Heights */
   --line-height-tight: 1.2;
@@ -206,21 +216,29 @@
   --space-5xl: var(--space-20);
   
   /* ============================================
-     BORDERS - Tailwind-inspired
+     BORDERS - Neo-Brutalist Style
      ============================================ */
   
   --border-width-0: 0;
   --border-width: 1px;
   --border-width-2: 2px;
+  --border-width-3: 3px;
   --border-width-4: 4px;
+  --border-width-5: 5px;
   --border-width-8: 8px;
+  
+  /* Neo-Brutalist border styles */
+  --border-brutal: var(--border-width-4) solid var(--color-stone-950);
+  --border-brutal-thick: var(--border-width-5) solid var(--color-stone-950);
+  --border-brutal-accent: var(--border-width-4) solid currentColor;
   
   /* Legacy mappings */
   --border-width-thin: var(--border-width);
-  --border-width-base: var(--border-width-2);
-  --border-width-thick: 3px;
-  --border-width-heavy: var(--border-width-4);
+  --border-width-base: var(--border-width-3);
+  --border-width-thick: var(--border-width-4);
+  --border-width-heavy: var(--border-width-5);
   
+  /* Neo-Brutalist corners - mostly sharp with occasional subtle rounds */
   --rounded-none: 0;
   --rounded-sm: 0.125rem;    /* 2px */
   --rounded: 0.25rem;         /* 4px */
@@ -231,37 +249,56 @@
   --rounded-3xl: 1.5rem;      /* 24px */
   --rounded-full: 9999px;
   
-  /* Legacy mappings */
-  --border-radius-sm: var(--rounded);
-  --border-radius-base: var(--rounded-lg);
-  --border-radius-md: var(--rounded-xl);
-  --border-radius-lg: var(--rounded-2xl);
-  --border-radius-xl: 1.25rem;
-  --border-radius-2xl: var(--rounded-3xl);
+  /* Legacy mappings - reduced for brutalist aesthetic */
+  --border-radius-sm: var(--rounded-none);
+  --border-radius-base: var(--rounded);
+  --border-radius-md: var(--rounded);
+  --border-radius-lg: var(--rounded-md);
+  --border-radius-xl: var(--rounded-lg);
+  --border-radius-2xl: var(--rounded-xl);
   --border-radius-round: 50%;
   --border-radius-pill: var(--rounded-full);
   
   /* ============================================
-     SHADOWS - Tailwind-inspired elevation
+     SHADOWS - Neo-Brutalist Hard Shadows
      ============================================ */
   
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  /* Hard offset shadows - signature of Neo-Brutalism */
+  --shadow-brutal-sm: 2px 2px 0px var(--color-stone-950);
+  --shadow-brutal: 4px 4px 0px var(--color-stone-950);
+  --shadow-brutal-md: 6px 6px 0px var(--color-stone-950);
+  --shadow-brutal-lg: 8px 8px 0px var(--color-stone-950);
+  --shadow-brutal-xl: 10px 10px 0px var(--color-stone-950);
+  --shadow-brutal-2xl: 12px 12px 0px var(--color-stone-950);
+  
+  /* Colored brutal shadows */
+  --shadow-brutal-indigo: 6px 6px 0px var(--color-indigo-600);
+  --shadow-brutal-emerald: 6px 6px 0px var(--color-emerald-600);
+  --shadow-brutal-rose: 6px 6px 0px var(--color-rose-600);
+  --shadow-brutal-amber: 6px 6px 0px var(--color-amber-500);
+  
+  /* Hover shadows - reduced offset */
+  --shadow-brutal-hover: 2px 2px 0px var(--color-stone-950);
+  --shadow-brutal-active: 0px 0px 0px var(--color-stone-950);
+  
+  /* Legacy soft shadows - kept minimal */
+  --shadow-sm: var(--shadow-brutal-sm);
+  --shadow: var(--shadow-brutal);
+  --shadow-md: var(--shadow-brutal-md);
+  --shadow-lg: var(--shadow-brutal-lg);
+  --shadow-xl: var(--shadow-brutal-xl);
+  --shadow-2xl: var(--shadow-brutal-2xl);
+  --shadow-inner: inset 2px 2px 0px var(--color-stone-950);
   --shadow-none: 0 0 #0000;
   
   /* Legacy mappings */
-  --shadow-xs: var(--shadow-sm);
-  --shadow-base: var(--shadow-md);
+  --shadow-xs: var(--shadow-brutal-sm);
+  --shadow-base: var(--shadow-brutal);
   
   /* Colored shadows */
-  --shadow-primary: 0 10px 15px -3px oklch(0.553 0.237 262.848 / 0.3);
-  --shadow-success: 0 10px 15px -3px oklch(0.459 0.144 163.241 / 0.3);
-  --shadow-error: 0 10px 15px -3px oklch(0.485 0.194 9.217 / 0.3);
+  --shadow-primary: var(--shadow-brutal-indigo);
+  --shadow-success: var(--shadow-brutal-emerald);
+  --shadow-error: var(--shadow-brutal-rose);
   
   /* ============================================
      TRANSITIONS & ANIMATIONS
