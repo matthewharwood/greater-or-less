@@ -182,6 +182,7 @@ export class ModeSelector extends HTMLElement {
                 
                 .mode-btn:first-child {
                     border-right: 6px solid #000;
+                    overflow: visible;
                 }
                 
                 .mode-btn:hover:not(.active) {
@@ -199,16 +200,18 @@ export class ModeSelector extends HTMLElement {
                     content: '';
                     position: absolute;
                     top: 0;
-                    left: -100%;
+                    left: 0;
                     width: 100%;
                     height: 100%;
                     background: linear-gradient(90deg, 
                         transparent 0%, 
                         rgba(255,255,255,0.4) 50%, 
                         transparent 100%);
-                    transition: left 0.5s ease;
+                    transform: translateX(-100%);
+                    transition: transform 0.5s ease;
                     z-index: 1;
-                    clip-path: inset(0 0 0 0);
+                    overflow: hidden;
+                    pointer-events: none;
                 }
                 
                 .mode-btn:hover:not(.active) {
@@ -221,19 +224,26 @@ export class ModeSelector extends HTMLElement {
                 }
                 
                 .mode-btn:hover:not(.active)::before {
-                    left: 100%;
+                    transform: translateX(100%);
                 }
                 
                 /* Add brutal hover indicator */
                 .mode-btn:hover:not(.active)::after {
-                    content: '👆';
+                    content: '👈 PICK ME';
                     position: absolute;
                     bottom: -35px;
                     left: 50%;
                     transform: translateX(-50%);
-                    font-size: 28px;
+                    font-size: 14px;
+                    font-weight: 900;
+                    background: #fb7185;
+                    color: #000;
+                    padding: 4px 10px;
+                    border: 3px solid #000;
+                    box-shadow: 3px 3px 0px #000;
                     animation: brutal-point 0.5s ease-in-out infinite alternate;
                     pointer-events: none;
+                    white-space: nowrap;
                 }
                 
                 @keyframes brutal-point {
@@ -257,7 +267,28 @@ export class ModeSelector extends HTMLElement {
                     z-index: 1;
                 }
                 
-                .mode-btn.active::after {
+                /* Position checkmark on left for first button, right for second */
+                .mode-btn:first-of-type.active::after {
+                    content: '✓';
+                    position: absolute;
+                    top: -15px;
+                    left: -15px;
+                    width: 40px;
+                    height: 40px;
+                    background: #fbbf24;
+                    border: 4px solid #000;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    font-weight: 900;
+                    box-shadow: 3px 3px 0px #000;
+                    animation: brutal-check-bounce 0.5s ease-out;
+                    z-index: 100;
+                }
+                
+                .mode-btn:last-of-type.active::after {
                     content: '✓';
                     position: absolute;
                     top: -15px;
@@ -340,42 +371,6 @@ export class ModeSelector extends HTMLElement {
                     background-blend-mode: normal;
                 }
                 
-                /* Floating indicators pointing down at buttons */
-                .indicator-left,
-                .indicator-right {
-                    position: absolute;
-                    top: -55px;
-                    font-size: 32px;
-                    animation: brutal-point-down 2s ease-in-out infinite;
-                    transform: rotate(180deg);
-                    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.3));
-                }
-                
-                .indicator-left {
-                    left: 50px;
-                    animation-delay: 0s;
-                }
-                
-                .indicator-right {
-                    right: 50px;
-                    animation-delay: 1s;
-                }
-                
-                /* Only show indicators when no button is active to help user choose */
-                .mode-btn.active ~ .indicator-left,
-                .mode-btn.active ~ .indicator-right {
-                    opacity: 0;
-                    pointer-events: none;
-                }
-                
-                @keyframes brutal-point-down {
-                    0%, 100% { 
-                        transform: rotate(180deg) translateY(0);
-                    }
-                    50% { 
-                        transform: rotate(180deg) translateY(8px);
-                    }
-                }
                 
                 @media (max-width: 480px) {
                     :host {
@@ -439,7 +434,6 @@ export class ModeSelector extends HTMLElement {
             </style>
             
             <div class="mode-selector">
-                <span class="indicator-left">👇</span>
                 <button id="greater-btn" class="mode-btn ${this._mode === 'greater' ? 'active' : ''}">
                     Greater
                     <span class="operator-symbol">></span>
@@ -448,7 +442,6 @@ export class ModeSelector extends HTMLElement {
                     Less
                     <span class="operator-symbol"><</span>
                 </button>
-                <span class="indicator-right">👇</span>
             </div>
         `;
     }

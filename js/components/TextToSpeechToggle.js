@@ -95,7 +95,7 @@ export class TextToSpeechToggle extends HTMLElement {
                     justify-content: center;
                     transform: rotate(-3deg);
                     transition: all 0.1s ease;
-                    overflow: hidden;
+                    overflow: visible;
                 }
                 
                 .tts-toggle::before {
@@ -177,6 +177,8 @@ export class TextToSpeechToggle extends HTMLElement {
                     opacity: 0;
                     transform: scale(0) rotate(0deg);
                     transition: all 0.3s ease;
+                    z-index: 100;
+                    pointer-events: none;
                 }
                 
                 .tts-toggle.active .checkmark {

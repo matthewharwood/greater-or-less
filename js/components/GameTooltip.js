@@ -14,6 +14,7 @@ export class GameTooltip extends HTMLElement {
     connectedCallback() {
         this.render();
         this.startAutoHide();
+        this.playWarningSound();
     }
 
     disconnectedCallback() {
@@ -68,6 +69,12 @@ export class GameTooltip extends HTMLElement {
         this._timeoutId = setTimeout(() => {
             this.hide();
         }, this._duration);
+    }
+
+    playWarningSound() {
+        const audio = new Audio('img/warn.mp3');
+        audio.volume = 0.4;
+        audio.play().catch(e => console.log('Could not play warning sound:', e));
     }
 
     render() {

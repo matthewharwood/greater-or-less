@@ -3,7 +3,9 @@ export class CelebrationScene extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this._duration = 12000;
-        this._playerName = 'Dean';
+        // Get player name from localStorage, default to CHAMPION if not set
+        const storedName = localStorage.getItem('playerName');
+        this._playerName = storedName && storedName.trim() ? storedName.toUpperCase() : 'CHAMPION';
         this._fireworks = [];
         this._animationId = null;
         this._canvas = null;
