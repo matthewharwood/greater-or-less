@@ -99,6 +99,7 @@ export class GameContainer extends HTMLElement {
             <style>
                 :host {
                     display: block;
+                    position: relative;
                 }
                 
                 .game-content {
