@@ -8,7 +8,7 @@ export class NumberLine extends HTMLElement {
         this._rightNumber = 0;
         this._canvas = null;
         this._ctx = null;
-        
+
         // Listen for language changes
         this._languageListener = () => {
             this.draw();
@@ -25,7 +25,7 @@ export class NumberLine extends HTMLElement {
         this.draw();
         TranslationService.addListener(this._languageListener);
     }
-    
+
     disconnectedCallback() {
         TranslationService.removeListener(this._languageListener);
     }
@@ -60,7 +60,7 @@ export class NumberLine extends HTMLElement {
                     margin-top: -10px;
                     position: relative;
                     z-index: 10;
-                    width: 100vw;
+                    width: 95vw;
                     margin-left: calc(-50vw + 50%);
                     margin-right: calc(-50vw + 50%);
                 }
@@ -129,20 +129,7 @@ export class NumberLine extends HTMLElement {
                     100% { background-position: 100% 50%; }
                 }
 
-                .canvas-container::after {
-                    content: '➜';
-                    position: absolute;
-                    top: 50%;
-                    right: -20px;
-                    transform: translateY(-50%);
-                    font-size: 40px;
-                    color: #10b981;
-                    text-shadow:
-                        2px 2px 0px #000,
-                        4px 4px 0px #fbbf24;
-                    animation: brutal-arrow-pulse 2s ease-in-out infinite;
-                    z-index: 1;
-                }
+
 
                 @keyframes brutal-arrow-pulse {
                     0%, 100% {
@@ -231,7 +218,7 @@ export class NumberLine extends HTMLElement {
     setupCanvas() {
         this._canvas = this.shadowRoot.querySelector('canvas');
         this._ctx = this._canvas.getContext('2d');
-        
+
         // Set canvas width to available space (accounting for button areas)
         const container = this.shadowRoot.querySelector('.canvas-container');
         if (container) {
@@ -250,8 +237,8 @@ export class NumberLine extends HTMLElement {
         // Clear canvas with transparent background
         ctx.clearRect(0, 0, width, height);
 
-        // Draw main number line with brutal style
-        const lineY = height / 2;
+        // Draw main number line with brutal style - shifted down by 25px
+        const lineY = height / 2 + 25;
         const padding = 60;
         const lineWidth = width - (padding * 2);
 
@@ -571,40 +558,49 @@ export class NumberLine extends HTMLElement {
 
     drawArrows(ctx, leftPos, rightPos, lineY) {
         // Add pointing hands that always point directly at the number positions
-        const handY = 35; // Adjusted height to accommodate label backgrounds
+        const handY = 60; // Adjusted height to accommodate label backgrounds and shift
         const minSpacing = 50; // Minimum spacing between hands to avoid overlap
+        const canvasWidth = this._canvas.width;
 
         // Calculate if hands would overlap
         const distance = Math.abs(rightPos - leftPos);
         const handsWouldOverlap = distance < minSpacing;
 
+        // Calculate label dimensions first to properly bound check
+        ctx.font = 'bold 14px "Roboto", sans-serif';
+        const leftLabelText = TranslationService.get('left').toUpperCase();
+        const rightLabelText = TranslationService.get('right').toUpperCase();
+        const boxPadding = 8;
+        const leftBoxWidth = ctx.measureText(leftLabelText).width + (boxPadding * 2);
+        const rightBoxWidth = ctx.measureText(rightLabelText).width + (boxPadding * 2);
+        const boxHeight = 22;
+        const boxY = -45;
+        
+        // Calculate minimum edge distance based on half the box width plus some padding
+        const leftMinEdge = leftBoxWidth/2 + 10;
+        const rightMinEdge = rightBoxWidth/2 + 10;
+
         // Left pointing hand
         ctx.save();
 
-        // Position directly above the left number
+        // Position directly above the left number, but ensure it stays within canvas bounds
         let leftHandX = leftPos;
         if (handsWouldOverlap) {
             // Offset to the left to avoid overlap
             leftHandX = leftPos - 25;
         }
+        
+        // Ensure the left hand and its label don't go past the left edge
+        leftHandX = Math.max(leftMinEdge, leftHandX);
 
         ctx.translate(leftHandX, handY);
 
-        // Draw label background above hand
-        const leftLabelText = TranslationService.get('left').toUpperCase();
-        ctx.font = 'bold 14px "Roboto", sans-serif';
-        const leftTextWidth = ctx.measureText(leftLabelText).width;
-        const boxPadding = 8;
-        const boxWidth = leftTextWidth + (boxPadding * 2);
-        const boxHeight = 22;
-        const boxY = -45;
-
         // Background box for LEFT label
         ctx.fillStyle = '#fecdd3';
-        ctx.fillRect(-boxWidth/2, boxY, boxWidth, boxHeight);
+        ctx.fillRect(-leftBoxWidth/2, boxY, leftBoxWidth, boxHeight);
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
-        ctx.strokeRect(-boxWidth/2, boxY, boxWidth, boxHeight);
+        ctx.strokeRect(-leftBoxWidth/2, boxY, leftBoxWidth, boxHeight);
 
         // Add label text
         ctx.fillStyle = '#000';
@@ -628,20 +624,17 @@ export class NumberLine extends HTMLElement {
         // Right pointing hand
         ctx.save();
 
-        // Position directly above the right number
+        // Position directly above the right number, but ensure it stays within canvas bounds
         let rightHandX = rightPos;
         if (handsWouldOverlap) {
             // Offset to the right to avoid overlap
             rightHandX = rightPos + 25;
         }
+        
+        // Ensure the right hand and its label don't go past the right edge
+        rightHandX = Math.min(canvasWidth - rightMinEdge, rightHandX);
 
         ctx.translate(rightHandX, handY);
-
-        // Draw label background above hand
-        const rightLabelText = TranslationService.get('right').toUpperCase();
-        ctx.font = 'bold 14px "Roboto", sans-serif';
-        const rightTextWidth = ctx.measureText(rightLabelText).width;
-        const rightBoxWidth = rightTextWidth + (boxPadding * 2);
 
         // Background box for RIGHT label
         ctx.fillStyle = '#a7f3d0';

@@ -84,33 +84,15 @@ export class ModeSelector extends HTMLElement {
     updateButtons() {
         const greaterBtn = this.shadowRoot.querySelector('#greater-btn');
         const lessBtn = this.shadowRoot.querySelector('#less-btn');
-        const selector = this.shadowRoot.querySelector('.mode-selector');
         
         if (greaterBtn && lessBtn) {
-            // Simply update the button states without animations
+            // Simply update the button states without any animations
             if (this._mode === 'greater') {
                 greaterBtn.classList.add('active');
                 lessBtn.classList.remove('active');
             } else {
                 lessBtn.classList.add('active');
                 greaterBtn.classList.remove('active');
-            }
-            
-            // Only animate on actual mode changes, not initial load
-            if (selector && !this._isInitialLoad) {
-                // Remove any lingering animation classes first
-                selector.classList.remove('fade-out', 'spin-in', 'mode-change-animation');
-                
-                // Force reflow to ensure clean animation start
-                void selector.offsetHeight;
-                
-                // Add single animation class for mode change
-                selector.classList.add('mode-change-animation');
-                
-                // Clean up after animation completes
-                setTimeout(() => {
-                    selector.classList.remove('mode-change-animation');
-                }, 600);
             }
             
             // Clear the initial load flag after first update
@@ -439,32 +421,6 @@ export class ModeSelector extends HTMLElement {
                     }
                 }
                 
-                /* Single mode change animation */
-                .mode-selector.mode-change-animation {
-                    animation: brutal-mode-change 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                }
-                
-                @keyframes brutal-mode-change {
-                    0% {
-                        transform: scale(1) rotate(0deg);
-                    }
-                    30% {
-                        transform: scale(0.9) rotate(-10deg);
-                        opacity: 0.8;
-                    }
-                    50% {
-                        transform: scale(0.7) rotate(-180deg);
-                        opacity: 0.6;
-                    }
-                    70% {
-                        transform: scale(1.1) rotate(-270deg);
-                        opacity: 0.9;
-                    }
-                    100% {
-                        transform: scale(1) rotate(-360deg);
-                        opacity: 1;
-                    }
-                }
             </style>
             
             <div class="mode-selector">

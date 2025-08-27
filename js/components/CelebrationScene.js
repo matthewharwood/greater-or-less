@@ -19,6 +19,17 @@ export class CelebrationScene extends HTMLElement {
             this._playerName = storedName && storedName.trim() ? storedName.toUpperCase() : TranslationService.get('champion').toUpperCase();
             this.render();
         };
+        
+        // Listen for storage changes (when name changes in another component)
+        this._storageListener = (e) => {
+            if (e.key === 'playerName' && e.newValue) {
+                this._playerName = e.newValue.toUpperCase();
+                if (this.shadowRoot) {
+                    this.render();
+                    this.setupCanvas();
+                }
+            }
+        };
     }
 
     static get observedAttributes() {
@@ -30,6 +41,7 @@ export class CelebrationScene extends HTMLElement {
         this.setupCanvas();
         this.startCelebration();
         TranslationService.addListener(this._languageListener);
+        window.addEventListener('storage', this._storageListener);
     }
 
     disconnectedCallback() {
@@ -37,12 +49,15 @@ export class CelebrationScene extends HTMLElement {
             cancelAnimationFrame(this._animationId);
         }
         TranslationService.removeListener(this._languageListener);
+        window.removeEventListener('storage', this._storageListener);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch(name) {
             case 'player-name':
-                this._playerName = newValue || 'Dean';
+                // Use the same logic as constructor - check localStorage first, then use translated champion
+                const storedName = localStorage.getItem('playerName');
+                this._playerName = newValue || (storedName && storedName.trim() ? storedName.toUpperCase() : TranslationService.get('champion').toUpperCase());
                 break;
             case 'duration':
                 this._duration = parseInt(newValue) || 12000;
