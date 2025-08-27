@@ -277,19 +277,22 @@ export class GameContainer extends HTMLElement {
             }, 1000);
         }
         
-        // Clear and setup result container with proper positioning
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: block;
-                    position: relative;
-                }
-            </style>
-            <div style="position: relative;">
-            </div>
-        `;
-        
-        const container = this.shadowRoot.querySelector('div');
+        // Don't clear innerHTML - overlay the result screen instead
+        // Create a container for the result screen if it doesn't exist
+        let resultContainer = this.shadowRoot.querySelector('.result-container');
+        if (!resultContainer) {
+            resultContainer = document.createElement('div');
+            resultContainer.className = 'result-container';
+            resultContainer.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 200;
+            `;
+            this.shadowRoot.appendChild(resultContainer);
+        }
         
         // Show result screen
         const resultScreen = document.createElement('result-screen');
@@ -299,15 +302,20 @@ export class GameContainer extends HTMLElement {
         resultScreen.setAttribute('mode', this._mode);
         
         resultScreen.onCountdownComplete = () => {
+            // Remove result screen before starting new game
+            if (resultContainer) {
+                resultContainer.remove();
+            }
             this.startNewGame();
         };
         
-        container.appendChild(resultScreen);
+        resultContainer.innerHTML = '';
+        resultContainer.appendChild(resultScreen);
         
         if (won) {
             // Add confetti to result screen container
             const confetti = document.createElement('confetti-canvas');
-            container.appendChild(confetti);
+            resultContainer.appendChild(confetti);
         }
     }
 

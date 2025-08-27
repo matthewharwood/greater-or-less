@@ -283,8 +283,10 @@ export class ResultScreen extends HTMLElement {
                     }
                 }
             </style>
-            <h2>${this.getWinningMessage()}</h2>
-            <div id="countdown">3</div>
+            <div class="result-content">
+                <h2>${this.getWinningMessage()}</h2>
+                <div id="countdown">3</div>
+            </div>
         `;
     }
 
@@ -451,13 +453,15 @@ export class ResultScreen extends HTMLElement {
                     transform: rotate(5deg);
                 }
             </style>
-            <h2>❌ WRONG! ❌</h2>
-            <div class="explanation-well">
-                <div class="explanation-icon">📚</div>
-                ${this.getExplanation()}
+            <div class="result-content">
+                <h2>❌ WRONG! ❌</h2>
+                <div class="explanation-well">
+                    <div class="explanation-icon">📚</div>
+                    ${this.getExplanation()}
+                </div>
+                <p class="encouragement">${this.getEncouragementMessage()}</p>
+                <div id="countdown">15</div>
             </div>
-            <p class="encouragement">${this.getEncouragementMessage()}</p>
-            <div id="countdown">15</div>
         `;
     }
 
@@ -465,9 +469,28 @@ export class ResultScreen extends HTMLElement {
         return `
             :host {
                 display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
                 text-align: center;
                 padding: 30px;
-                position: relative;
+                background: rgba(255, 255, 255, 0.98);
+                z-index: 100;
+                overflow-y: auto;
+                animation: brutal-slide-in 0.3s ease-out;
+            }
+            
+            @keyframes brutal-slide-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px) scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
             }
             
             :host::before {
@@ -491,6 +514,15 @@ export class ResultScreen extends HTMLElement {
             * {
                 position: relative;
                 z-index: 2;
+            }
+            
+            .result-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100%;
+                padding: 40px 20px;
             }
         `;
     }

@@ -48,23 +48,29 @@ export class NumberLine extends HTMLElement {
                     margin-top: -10px;
                     position: relative;
                     z-index: 10;
+                    width: 100vw;
+                    margin-left: calc(-50vw + 50%);
+                    margin-right: calc(-50vw + 50%);
                 }
 
                 .canvas-container {
                     position: relative;
-                    display: inline-block;
-                    margin: 0 auto;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     transform: rotate(0.5deg);
                     transition: transform 0.2s ease;
-                    padding: 40px 60px;
+                    padding: 40px 120px;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
                 /* Skewed background frame - proper rhombus */
                 .skewed-frame {
                     position: absolute;
                     top: -10px;
-                    left: -30px;
-                    right: -30px;
+                    left: 80px;
+                    right: 80px;
                     bottom: -10px;
                     border: 8px solid #000;
                     background: rgba(255, 255, 255, 0.3);
@@ -75,9 +81,9 @@ export class NumberLine extends HTMLElement {
                         30px 20px 0px rgba(0,0,0,0.3);
                     border-radius: 0;
                     clip-path: polygon(
-                        15% 0%,
+                        5% 0%,
                         100% 0%,
-                        85% 100%,
+                        95% 100%,
                         0% 100%
                     );
                 }
@@ -145,7 +151,8 @@ export class NumberLine extends HTMLElement {
                         #fde68a 75%,
                         #fef3c7 100%);
                     box-shadow: 10px 10px 0px #000;
-                    max-width: 100%;
+                    width: auto;
+                    max-width: calc(100vw - 240px);
                     height: auto;
                     display: block;
                     position: relative;
@@ -204,7 +211,7 @@ export class NumberLine extends HTMLElement {
             <div class="canvas-container">
                 <div class="skewed-frame"></div>
                 <div class="motion-lines"></div>
-                <canvas width="800" height="180"></canvas>
+                <canvas id="numberline-canvas" height="180"></canvas>
             </div>
         `;
     }
@@ -212,6 +219,13 @@ export class NumberLine extends HTMLElement {
     setupCanvas() {
         this._canvas = this.shadowRoot.querySelector('canvas');
         this._ctx = this._canvas.getContext('2d');
+        
+        // Set canvas width to available space (accounting for button areas)
+        const container = this.shadowRoot.querySelector('.canvas-container');
+        if (container) {
+            const containerWidth = container.getBoundingClientRect().width - 240; // Leave space for buttons
+            this._canvas.width = Math.max(800, Math.min(1400, containerWidth));
+        }
     }
 
     draw() {
