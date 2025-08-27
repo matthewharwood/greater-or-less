@@ -299,7 +299,7 @@ export class GameContainer extends HTMLElement {
         resultScreen.setAttribute('mode', this._mode);
         
         resultScreen.onCountdownComplete = () => {
-            location.reload();
+            this.startNewGame();
         };
         
         container.appendChild(resultScreen);

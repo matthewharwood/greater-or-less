@@ -10,11 +10,13 @@ import './components/ProgressBar.js';
 import './components/CelebrationScene.js';
 import './components/ModeSelector.js';
 import './components/TextToSpeechToggle.js';
+import './components/MusicToggle.js';
 import './components/GameContainer.js';
 
 // Import services
 import './services/GameLogic.js';
 import './services/AudioService.js';
+import './services/MusicService.js';
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
