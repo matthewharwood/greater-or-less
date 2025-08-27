@@ -217,20 +217,22 @@ export class ResultScreen extends HTMLElement {
                 
                 h2 {
                     color: #000;
-                    font-size: 36px;
+                    font-size: clamp(24px, 5vw, 36px);
                     font-weight: 900;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
                     font-family: 'Roboto', sans-serif;
                     position: relative;
                     z-index: 20;
-                    margin: 30px auto;
-                    padding: 20px 40px;
+                    margin: 20px auto;
+                    padding: 15px 30px;
                     background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
                     border: 6px solid #000;
                     box-shadow: 10px 10px 0px #000;
                     transform: rotate(-3deg);
                     display: inline-block;
+                    max-width: 90%;
+                    word-wrap: break-word;
                 }
                 
                 h2::after {
@@ -248,16 +250,16 @@ export class ResultScreen extends HTMLElement {
                 #countdown {
                     position: relative;
                     z-index: 20;
-                    font-size: 72px;
+                    font-size: clamp(48px, 8vw, 72px);
                     font-weight: 900;
                     color: #000;
                     font-family: 'Roboto Mono', monospace;
-                    margin: 30px auto;
+                    margin: 20px auto;
                     background: #fbbf24;
                     border: 6px solid #000;
                     border-radius: 0;
-                    width: 120px;
-                    height: 120px;
+                    width: clamp(80px, 15vw, 120px);
+                    height: clamp(80px, 15vw, 120px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -296,6 +298,21 @@ export class ResultScreen extends HTMLElement {
                         background: #fde68a;
                     }
                 }
+                
+                @media (max-height: 600px) {
+                    h2 {
+                        margin: 10px auto;
+                        padding: 10px 20px;
+                        font-size: 20px;
+                    }
+                    
+                    #countdown {
+                        width: 70px;
+                        height: 70px;
+                        font-size: 36px;
+                        margin: 15px auto;
+                    }
+                }
             </style>
             <div class="result-content">
                 <h2>${this.getWinningMessage()}</h2>
@@ -311,19 +328,21 @@ export class ResultScreen extends HTMLElement {
                 
                 h2 {
                     color: #000;
-                    font-size: 36px;
+                    font-size: clamp(24px, 5vw, 36px);
                     font-weight: 900;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
                     font-family: 'Roboto', sans-serif;
-                    margin: 30px auto;
-                    padding: 20px 40px;
+                    margin: 20px auto;
+                    padding: 15px 30px;
                     background: #fb7185;
                     border: 6px solid #000;
                     box-shadow: 10px 10px 0px #000;
                     transform: rotate(3deg);
                     display: inline-block;
                     position: relative;
+                    max-width: 90%;
+                    word-wrap: break-word;
                 }
                 
                 h2::after {
@@ -348,31 +367,32 @@ export class ResultScreen extends HTMLElement {
                     background: #fef3c7;
                     border: 6px solid #000;
                     border-radius: 0;
-                    padding: 30px;
-                    margin: 30px auto;
+                    padding: 15px;
+                    margin: 15px auto;
                     box-shadow: 8px 8px 0px #000;
                     position: relative;
                     overflow: visible;
                     transform: rotate(-1deg);
-                    max-width: 500px;
+                    max-width: min(600px, 85%);
+                    box-sizing: border-box;
                 }
                 
                 .explanation-well::before {
                     content: '!';
                     position: absolute;
-                    top: -20px;
-                    right: -20px;
-                    font-size: 80px;
+                    top: -15px;
+                    right: -15px;
+                    font-size: clamp(40px, 8vw, 60px);
                     font-weight: 900;
                     color: #000;
                     background: #fbbf24;
-                    width: 60px;
-                    height: 60px;
+                    width: clamp(40px, 8vw, 50px);
+                    height: clamp(40px, 8vw, 50px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border: 5px solid #000;
-                    box-shadow: 4px 4px 0px #000;
+                    border: 4px solid #000;
+                    box-shadow: 3px 3px 0px #000;
                     transform: rotate(15deg);
                 }
                 
@@ -381,90 +401,151 @@ export class ResultScreen extends HTMLElement {
                 }
                 
                 .number-explanation {
-                    font-size: 28px;
-                    margin: 20px 0;
+                    font-size: clamp(16px, 3.5vw, 24px);
+                    margin: 10px 0;
                     color: #000;
                     font-weight: 700;
                     font-family: 'Roboto', sans-serif;
                     text-transform: uppercase;
                     letter-spacing: 0.02em;
+                    word-wrap: break-word;
+                    line-height: 1.3;
                 }
                 
                 .statement-result {
-                    font-size: 20px;
+                    font-size: clamp(14px, 3vw, 20px);
                     color: #000;
                     font-weight: 600;
                     font-family: 'Roboto Mono', monospace;
                     background: #fff;
-                    padding: 15px;
+                    padding: 10px;
                     border: 4px solid #000;
-                    margin-top: 20px;
+                    margin-top: 15px;
                     box-shadow: 4px 4px 0px #000;
+                    word-wrap: break-word;
                 }
                 
                 .highlight-red {
                     background: #fb7185;
                     color: #000;
-                    padding: 2px 8px;
+                    padding: 1px 6px;
                     font-weight: 900;
-                    border: 3px solid #000;
+                    border: 2px solid #000;
                     display: inline-block;
                     transform: rotate(-2deg);
                     box-shadow: 2px 2px 0px #000;
+                    margin: 0 2px;
                 }
                 
                 .highlight-green {
                     background: #10b981;
                     color: #000;
-                    padding: 2px 8px;
+                    padding: 1px 6px;
                     font-weight: 900;
-                    border: 3px solid #000;
+                    border: 2px solid #000;
                     display: inline-block;
                     transform: rotate(2deg);
                     box-shadow: 2px 2px 0px #000;
+                    margin: 0 2px;
                 }
                 
                 .highlight-yellow {
                     background: #fbbf24;
                     color: #000;
-                    padding: 2px 8px;
+                    padding: 1px 6px;
                     font-weight: 900;
-                    border: 3px solid #000;
+                    border: 2px solid #000;
                     display: inline-block;
                     transform: rotate(-1deg);
                     box-shadow: 2px 2px 0px #000;
+                    margin: 0 2px;
                 }
                 
                 .encouragement {
-                    font-size: 20px;
+                    font-size: clamp(16px, 3vw, 20px);
                     color: #000;
-                    margin: 30px auto;
+                    margin: 20px auto;
                     font-weight: 700;
                     font-family: 'Roboto', sans-serif;
                     background: linear-gradient(90deg, #fde68a 0%, #fbbf24 50%, #fde68a 100%);
-                    padding: 15px 25px;
+                    padding: 12px 20px;
                     border: 4px solid #000;
                     box-shadow: 6px 6px 0px #000;
                     transform: rotate(1deg);
                     display: inline-block;
-                    max-width: 400px;
+                    max-width: min(400px, 85%);
+                    word-wrap: break-word;
+                    box-sizing: border-box;
                 }
                 
                 #countdown {
-                    font-size: 48px;
+                    font-size: clamp(36px, 6vw, 48px);
                     color: #000;
                     font-weight: 900;
                     font-family: 'Roboto Mono', monospace;
-                    margin: 30px auto;
+                    margin: 15px auto;
                     background: #fb7185;
                     border: 5px solid #000;
-                    width: 100px;
-                    height: 100px;
+                    width: clamp(70px, 12vw, 100px);
+                    height: clamp(70px, 12vw, 100px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     box-shadow: 6px 6px 0px #000;
                     transform: rotate(5deg);
+                }
+                
+                @media (max-height: 700px) {
+                    h2 {
+                        margin: 10px auto;
+                        padding: 10px 20px;
+                        font-size: 20px;
+                    }
+                    
+                    .explanation-well {
+                        margin: 10px auto;
+                        padding: 12px;
+                    }
+                    
+                    .explanation-well::before {
+                        font-size: 30px;
+                        width: 35px;
+                        height: 35px;
+                        top: -10px;
+                        right: -10px;
+                    }
+                    
+                    .number-explanation {
+                        font-size: 16px;
+                        margin: 8px 0;
+                    }
+                    
+                    .statement-result {
+                        font-size: 14px;
+                        padding: 8px;
+                        margin-top: 10px;
+                    }
+                    
+                    .encouragement {
+                        font-size: 14px;
+                        margin: 10px auto;
+                        padding: 8px 15px;
+                    }
+                    
+                    #countdown {
+                        width: 60px;
+                        height: 60px;
+                        font-size: 30px;
+                        margin: 10px auto;
+                    }
+                    
+                    .highlight-red,
+                    .highlight-green,
+                    .highlight-yellow {
+                        padding: 0px 4px;
+                        border-width: 2px;
+                        font-size: inherit;
+                    }
                 }
             </style>
             <div class="result-content">
@@ -483,16 +564,15 @@ export class ResultScreen extends HTMLElement {
         return `
             :host {
                 display: block;
-                position: absolute;
+                position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
                 text-align: center;
-                padding: 30px;
                 background: rgba(255, 255, 255, 0.98);
                 z-index: 100;
-                overflow-y: auto;
+                overflow: hidden;
                 animation: brutal-slide-in 0.3s ease-out;
             }
             
@@ -534,9 +614,9 @@ export class ResultScreen extends HTMLElement {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                min-height: 100%;
-                padding: 40px 20px;
+                justify-content: flex-start;
+                padding: 40px 20px 20px;
+                box-sizing: border-box;
             }
         `;
     }
