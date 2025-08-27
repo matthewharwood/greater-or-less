@@ -39,6 +39,17 @@
       -webkit-touch-callout: none;
     }
     
+    /* Font variables for language switching */
+    :root {
+      --text-font: 'Roboto', sans-serif;
+      --number-font: 'Roboto Mono', monospace;
+    }
+    
+    /* Override font for Hindi */
+    body.lang-hi {
+      --text-font: 'Gotu', 'Roboto', sans-serif;
+    }
+    
     /* Component-specific overrides using CSS variables */
     body {
       background-color: var(--color-bg-primary);

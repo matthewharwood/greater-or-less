@@ -4,6 +4,32 @@
  */
 
 /* ============================================
+   LANGUAGE-SPECIFIC FONT OVERRIDES
+   ============================================ */
+
+/* Apply Gotu font for Hindi text elements */
+body.lang-hi .btn-brutal,
+body.lang-hi .card-brutal h2,
+body.lang-hi .card-brutal h3,
+body.lang-hi .badge-brutal,
+body.lang-hi .chip-brutal,
+body.lang-hi game-button,
+body.lang-hi game-container,
+body.lang-hi mode-selector,
+body.lang-hi player-name-input,
+body.lang-hi equation-display,
+body.lang-hi result-screen,
+body.lang-hi celebration-scene {
+  font-family: 'Gotu', var(--text-font), 'Roboto', sans-serif !important;
+}
+
+/* Keep numbers in Roboto Mono for all languages */
+body.lang-hi .number,
+body.lang-hi [data-type="number"] {
+  font-family: var(--number-font) !important;
+}
+
+/* ============================================
    BUTTONS - Neo-Brutalist Style
    ============================================ */
 

@@ -8,7 +8,8 @@ export class LanguageSelector extends HTMLElement {
         this._languages = [
             { code: 'en', name: 'English', flag: '🇺🇸' },
             { code: 'ko', name: '한국어', flag: '🇰🇷' },
-            { code: 'ja', name: '日本語', flag: '🇯🇵' }
+            { code: 'ja', name: '日本語', flag: '🇯🇵' },
+            { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' }
         ];
         this._currentLanguage = TranslationService.getCurrentLanguage();
     }
@@ -16,6 +17,8 @@ export class LanguageSelector extends HTMLElement {
     connectedCallback() {
         this.render();
         this.attachEventListeners();
+        // Set initial font based on current language
+        this.updateFontForLanguage(this._currentLanguage);
     }
 
     disconnectedCallback() {
@@ -97,12 +100,52 @@ export class LanguageSelector extends HTMLElement {
             this.render();
             this.attachEventListeners();
             
+            // Load Gotu font for Hindi if needed
+            this.updateFontForLanguage(langCode);
+            
             // Play sound effect
             import('../services/AudioService.js').then(module => {
                 module.AudioService.playHoverSound();
             });
         }
         this.closeDropdown();
+    }
+    
+    updateFontForLanguage(langCode) {
+        // Check if Google Font link already exists
+        let fontLink = document.getElementById('gotu-font-link');
+        
+        if (langCode === 'hi') {
+            // Add Google Font link if it doesn't exist
+            if (!fontLink) {
+                fontLink = document.createElement('link');
+                fontLink.id = 'gotu-font-link';
+                fontLink.rel = 'stylesheet';
+                fontLink.href = 'https://fonts.googleapis.com/css2?family=Gotu&display=swap';
+                document.head.appendChild(fontLink);
+            }
+            
+            // Add CSS to apply Gotu font for Hindi text (not numbers)
+            let styleElement = document.getElementById('hindi-font-style');
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.id = 'hindi-font-style';
+                document.head.appendChild(styleElement);
+            }
+            styleElement.textContent = `
+                body.lang-hi {
+                    --text-font: 'Gotu', 'Roboto', sans-serif;
+                }
+            `;
+            
+            document.body.classList.add('lang-hi');
+            document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja');
+        } else {
+            // Remove Hindi class and add appropriate language class
+            document.body.classList.remove('lang-hi');
+            document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja');
+            document.body.classList.add(`lang-${langCode}`);
+        }
     }
 
     getCurrentLanguage() {
